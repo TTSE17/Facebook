@@ -1,0 +1,96 @@
+div .left-section {
+  width: 25%;
+  height: 100vh;
+}
+
+div .left-section h3 {
+  letter-spacing: 1.7px;
+}
+
+div .left-section h3::first-letter {
+  text-transform: capitalize;
+}
+
+div .right-section {
+  width: 80%;
+}
+
+div .right-section div img {
+  width: 59px;
+  height: 59px;
+}
+
+div .right-section #activity .content p {
+  word-break: break-word;
+}
+
+@media (max-width: 767px) {
+  div .left-section .nav {
+    font-size: 0.91rem;
+  }
+
+  div .right-section div img {
+    width: 43px;
+    height: 43px;
+  }
+
+  div .right-section #activity .content h6,
+  div .right-section #saved .content a,
+  div .right-section #saved .content h6 {
+    font-size: 0.93rem;
+  }
+
+  div .right-section #activity .content h6 span,
+  div .right-section #saved .content h6 span {
+    font-size: 0.99rem !important;
+  }
+
+  div .right-section #activity .content p,
+  div .right-section #activity small,
+  div .right-section #saved .content button,
+  div .right-section #saved small {
+    font-size: 0.73rem;
+  }
+}
+
+@media (max-width: 575px) {
+  div .left-section {
+    width: 14%;
+    height: 100vh;
+  }
+
+  div .left-section h3 {
+    display: none;
+  }
+
+  div .left-section .nav li a span {
+    display: none;
+  }
+
+  div .right-section {
+    width: 86%;
+  }
+
+  div .right-section div img {
+    width: 33px;
+    height: 33px;
+  }
+
+  div .right-section #activity .content h6,
+  div .right-section #saved .content a,
+  div .right-section #saved .content h6 {
+    font-size: 0.71rem;
+  }
+
+  div .right-section #activity .content h6 span,
+  div .right-section #saved .content h6 span {
+    font-size: 0.73rem !important;
+  }
+
+  div .right-section #activity .content p,
+  div .right-section #activity small,
+  div .right-section #saved .content button,
+  div .right-section #saved small {
+    font-size: 0.53rem;
+  }
+}

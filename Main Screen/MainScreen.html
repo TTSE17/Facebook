@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/BS/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/master.css" />
+    <link rel="stylesheet" href="MainScreen.css" />
+
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    /> -->
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-sm sticky-top my-3 mb-4">
+      <div class="container bg-white py-3 px-4 rounded-4 shadow">
+        <a class="navbar-brand fs-1 m-0" href="">VICTUS</a>
+        <button
+          class="navbar-toggler shadow-none"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul
+            class="iconBox1 navbar-nav justify-content-evenly flex-grow-1 mb-2 mb-sm-0"
+          >
+            <li class="nav-item">
+              <a class="nav-link p-3 text-primary" aria-current="page" href="">
+                <i class="fa-solid fa-house"></i>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link p-3 text-primary"
+                title="Saved Posts"
+                aria-current="page"
+                onclick="ClickProfileOption('saved')"
+                role="button"
+              >
+                <i class="fa-solid fa-bookmark"></i>
+              </a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a
+                title="Edit Profile"
+                class="nav-link dropdown-toggle p-3 text-primary"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fa-solid fa-user-pen"></i>
+              </a>
+
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <a class="dropdown-item edit-info" href="#">Update Info</a>
+                </li>
+                <hr class="dropdown-divider" />
+                <li>
+                  <a class="dropdown-item change-password" href="#"
+                    >Change Password</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <ul class="iconBox2 navbar-nav align-items-sm-center mb-2 mb-sm-0">
+            <li class="nav-item">
+              <a class="nav-link p-3 text-primary" aria-current="page" href="#">
+                <i class="fa-solid fa-bell"></i>
+              </a>
+            </li>
+            <li
+              class="nav-item image ms-sm-3 mt-4 mt-sm-0 overflow-hidden"
+              role="button"
+            >
+              <img decoding="async" class="w-100 h-100 rounded-circle" />
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="home">
+      <div class="home-header">
+        <div
+          class="container gap-sm-3 gap-2 rounded-4 py-3 bg-white d-flex align-items-start"
+        >
+          <div class="image overflow-hidden">
+            <img decoding="async" class="w-100 h-100  rounded-circle " />
+          </div>
+
+          <button
+            role="button"
+            class="flex-grow-1 btn ps-4 rounded-5 text-start"
+          >
+            What's on your mind ?
+          </button>
+        </div>
+      </div>
+
+      <div class="posts mt-4">
+        <div class="container px-0 pb-0">
+          <div class="post-header bg-white p-2 rounded-4">
+            <ul
+              class="nav nav-pills flex-sm-row flex-column justify-content-center gap-1 gap-sm-3"
+              role="tablist"
+            >
+              <li class="nav-item h5 m-0">
+                <a
+                  class="nav-link active px-sm-5 text-center rounded-4"
+                  data-bs-toggle="pill"
+                  href="#"
+                  >Recent</a
+                >
+              </li>
+              <li class="nav-item h5 m-0">
+                <a
+                  class="nav-link px-sm-5 text-center rounded-4"
+                  data-bs-toggle="pill"
+                  href="#"
+                  >Popular</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="content pb-lg-4 pb-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pop-section"></div>
+
+    <!-- Edit Comment -->
+    <div class="pop-section2"></div>
+
+    <!-- Alert - Confirm -->
+    <div class="alerts"></div>
+
+    <div class="loading position-fixed top-0 w-100 h-100 d-none">
+      <div class="overlay position-absolute w-100 h-100"></div>
+      <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+        <div class="spinner-border text-primary fs-3 p-5" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="../Js/BS/bootstrap.bundle.min.js"></script>
+    <script src="../Js/BS/all.min.js"></script>
+    <!-- <script src="../Js/main.js" type="module"></script> -->
+    <script src="MainScreen.js" type="module"></script>
+  </body>
+</html>

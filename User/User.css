@@ -1,0 +1,31 @@
+.user-info img {
+  height: 277px;
+  width: 277px;
+}
+
+.posts .content {
+  border-top: 1px solid #817f7f8a;
+}
+
+@media (max-width: 575px) {
+  .user-info img {
+    height: 199px;
+    width: 199px;
+  }
+
+  .user-info h2 {
+    font-size: calc(1.11rem + 0.9vw);
+  }
+
+  .profile-options button {
+    font-size: 0.91rem !important;
+  }
+
+  .current-user .dropdown-menu {
+    font-size: 0.79rem !important;
+  }
+
+  .current-user .dropdown-menu .dropdown-item {
+    padding: 7px 10px !important;
+  }
+}

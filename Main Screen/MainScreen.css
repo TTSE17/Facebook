@@ -1,0 +1,81 @@
+* {
+  font-family: "Cairo", sans-serif;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  /* text-decoration: none; */
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--background);
+  /* position: relative; */
+}
+
+.navbar .container .navbar-brand {
+  letter-spacing: 1.7px;
+}
+
+.navbar .container a.nav-link {
+  border-radius: 10px;
+  transition: var(--main-transition);
+}
+
+.navbar .container a.nav-link:hover {
+  background-color: #1877f2;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.navbar .container svg {
+  font-size: 25px;
+  transition: var(--main-transition);
+}
+
+.navbar .container a.nav-link:hover svg {
+  color: #d1deec;
+}
+
+.navbar .container .iconBox2 .image {
+  width: 55px;
+  height: 55px;
+}
+
+.home-header .image {
+  width: 45px;
+  height: 45px;
+}
+
+.home-header button {
+  background-color: #f2f3f5;
+  transition: var(--main-transition);
+}
+
+.home-header button:hover {
+  background-color: #c6c7c89e;
+}
+
+@media (max-width: 575px) {
+  .nav .nav-link {
+    font-size: 1.11rem;
+  }
+
+  .home-header .image {
+    width: 37px;
+    height: 37px;
+  }
+}
