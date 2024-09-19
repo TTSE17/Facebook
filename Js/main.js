@@ -1163,7 +1163,7 @@ async function HandleImage() {
   const uploadPreset = "n4wm4jwm";
   const folderName = "blog/Profile";
 
-  const url = `httpss://api.cloudinary.com/v1_1/${cloudName}/upload`;
+  const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
 
   const formData = new FormData();
   formData.append("file", file);
@@ -1765,7 +1765,7 @@ async function uploadMedia() {
   const cloudName = "dw91ky7d4";
   const uploadPreset = "n4wm4jwm";
   const folderName = "blog/Media";
-  const url = `httpss://api.cloudinary.com/v1_1/${cloudName}/upload`;
+  const url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
 
   for (const file of SelectedFiles) {
     const formData = new FormData();
