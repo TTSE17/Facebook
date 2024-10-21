@@ -467,15 +467,18 @@ export class Post {
     let response = new Response();
 
     try {
-      let data = await fetch("https://victus.runasp.net/api/Posts/GetAllPosts", {
-        method: "post",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(filterRequest),
-      });
+      let data = await fetch(
+        "https://victus.runasp.net/api/Posts/GetAllPosts",
+        {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filterRequest),
+        }
+      );
 
       if (data.ok) {
         response.obj = await data.json();
@@ -970,7 +973,9 @@ window.LoadUserInfo = async function (userId) {
 
   await delay(300);
 
-  window.location.href = `../User/User.html?userId=${userId}`;
+  alert("S");
+
+  // window.location.href = `../User/User.html?userId=${userId}`;
 };
 
 window.ClickEditProfileItem = function () {
