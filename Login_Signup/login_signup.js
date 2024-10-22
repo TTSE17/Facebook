@@ -92,7 +92,6 @@ function Result(response) {
     window.location.href = "../Main Screen/MainScreen.html";
   } else {
     ShowAlert("Error", response.error, "danger");
-
-    RemoveLoadingSection();
   }
+  RemoveLoadingSection();
 }
