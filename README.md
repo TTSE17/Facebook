@@ -1,5 +1,5 @@
 # Facebook
 
-JavaScript &amp; .Net &amp; SQL Server
+.NET &amp; JavaScript &amp; SQL Server
 
- [Show Website ](https://tahataha579.github.io/Facebook/Login_Signup/login_signup.html) 
+[Show](https://TTSE17.github.io/Facebook/Login_Signup/login_signup.html)
