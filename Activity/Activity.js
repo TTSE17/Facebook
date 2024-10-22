@@ -163,7 +163,11 @@ window.LoadPost = async function (postId) {
     return;
   }
 
+  await delay(333);
+
   window.location.href = `../Post/Post.html?postId=${postId}`;
+
+  RemoveLoadingSection();
 };
 
 async function LoadSavedPosts() {
