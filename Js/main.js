@@ -2458,7 +2458,7 @@ window.PostComment = async function () {
     return;
   }
 
-  ClickCommentsBtn(postId);
+  await ClickCommentsBtn(postId);
 
   RemoveLoadingSection();
 };
@@ -2611,14 +2611,16 @@ window.EditComment = async function (commentId) {
     return;
   }
 
-  ClickCommentsBtn(postId);
-
   closeEditCommentBtn.click();
+
+  await ClickCommentsBtn(postId);
 
   RemoveLoadingSection();
 };
 
 window.ClickDeleteComment = async function (commentId) {
+  ShowLoadingSection();
+
   let postId = post.obj.id;
 
   await post.init(postId);
@@ -2642,6 +2644,8 @@ window.ClickDeleteComment = async function (commentId) {
   yesBtn.onclick = async () => {
     await DeleteComment(commentId);
   };
+  
+  RemoveLoadingSection();
 };
 
 async function DeleteComment(commentId) {
@@ -2677,7 +2681,7 @@ async function DeleteComment(commentId) {
     return;
   }
 
-  ClickCommentsBtn(postId);
+  await ClickCommentsBtn(postId);
 
   RemoveLoadingSection();
 }
