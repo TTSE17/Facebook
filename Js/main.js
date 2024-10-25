@@ -1010,7 +1010,7 @@ window.ClickEditProfileItem = function () {
             <div class="image">
               <img
                 alt=""
-                class="rounded-5"
+                class="rounded-circle border"
                 decoding="async"
                 alt="${defaultImage}"
               />
