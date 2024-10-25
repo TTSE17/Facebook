@@ -412,7 +412,11 @@ window.HandleDate2 = function (dateText) {
 
   let date = new Date(dateText);
 
-  let seconds = (new Date() - date) / 1000;
+  var now = new Date();
+  var UTCseconds = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  var UTCdate = new Date(UTCseconds);
+
+  let seconds = (UTCdate - date) / 1000;
 
   if (seconds < 60) return "Now";
 
