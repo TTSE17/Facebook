@@ -181,16 +181,16 @@ window.ClickProfileLink = function () {
 
 function CreateGuestUserProfile() {
   profileOptions.innerHTML = `
-  <div class="guest-user px-3">
-    
-    <button
-      class="btn btn-primary w-100 fs-5"
-      style="letter-spacing: 0.5px;"
-      onclick="ClickProfileLink()"
-    >
-      Copy Profile Link
-    </button>
-
+  <div class="guest-user">
+    <div class = "container p-0"> 
+      <button
+        class="btn btn-primary w-100 fs-5"
+        style="letter-spacing: 0.5px;"
+        onclick="ClickProfileLink()"
+      >
+        Copy Profile Link
+      </button>
+    </div>
   </div>`;
 }
 
