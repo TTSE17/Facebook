@@ -392,7 +392,11 @@ window.HandleDate = function (dateText) {
 
   let date = new Date(dateText);
 
-  let seconds = (new Date() - date) / 1000;
+  var now = new Date();
+  var UTCseconds = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  var UTCdate = new Date(UTCseconds);
+
+  let seconds = (UTCdate - date) / 1000;
 
   if (seconds < 60) return "Now";
 
@@ -450,7 +454,11 @@ window.HandleDate2 = function (dateText) {
 window.HandleDate3 = function (dateText) {
   const date = new Date(dateText);
 
-  const datePart = date.toISOString().split("T")[0];
+  var hoursOffset = new Date().getTimezoneOffset() / 60;
+
+  date.setHours(date.getHours() + hoursOffset * -1);
+
+  const datePart = date.toJSON().split("T")[0];
 
   let hours = date.getHours();
   const minutes = date.getMinutes();
