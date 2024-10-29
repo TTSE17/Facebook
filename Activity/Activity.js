@@ -1,5 +1,5 @@
-import { Post } from "../Js/main.js";
-import { ShowAlert, ShowConfirmMessage } from "../Js/helper.js";
+import {} from "../Js/main.js";
+import { Post, ShowAlert, ShowConfirmMessage } from "../Js/helper.js";
 
 let trashBtn = document.querySelector("div .left-section ul a[href='#trash']");
 let activityLogBtn = document.querySelector(
@@ -27,49 +27,45 @@ window.RefreshPosts = function () {
   activityType = GetActivityType();
 
   if (activityType == null) {
-    RemoveLoadingSection();
-
     return;
   }
 
   if (activityType == "trash") trashBtn.click();
   else if (activityType == "activity") activityLogBtn.click();
   else if (activityType == "saved") savedPostsBtn.click();
-};
-
-async function ClickTrash() {
-  ShowLoadingSection();
-
-  await LoadTrash();
 
   RemoveLoadingSection();
+};
+
+RefreshPosts();
+
+async function ClickTrash() {
+  // ShowLoadingSection();
+
+  LoadTrash(); // wait
+
+  // RemoveLoadingSection();
 }
 
 async function ClickActivityLog() {
-  ShowLoadingSection();
+  // ShowLoadingSection();
 
-  await LoadActivity();
+  LoadActivity(); // wait
 
-  RemoveLoadingSection();
+  // RemoveLoadingSection();
 }
 
 async function ClickSavedPosts() {
-  ShowLoadingSection();
+  // ShowLoadingSection();
 
-  await LoadSavedPosts();
+  LoadSavedPosts(); // wait
 
-  RemoveLoadingSection();
-}
-
-LoadContent();
-
-RemoveLoadingSection();
-
-function LoadContent() {
-  RefreshPosts();
+  // RemoveLoadingSection();
 }
 
 async function LoadTrash() {
+  if (currentUser == null) return;
+
   let filterRequest = { UserId: currentUser.id, IsActive: false };
 
   let response = await Post.FetchPosts(filterRequest);
@@ -85,6 +81,8 @@ async function LoadTrash() {
 }
 
 async function LoadActivity() {
+  if (currentUser == null) return;
+
   let response = await currentUser.AllActivity();
 
   if (response.valid) {
@@ -111,12 +109,12 @@ function CreateActivity(item) {
     ? `role='button' onclick ='LoadPost(${item.postId})'`
     : "";
 
+  let typeText = item.activityType == "Like" ? "liked" : "commented on";
+
   let withPost =
     currentUser.id == item.userId
-      ? "His Own Post"
+      ? "your own post"
       : `<span class="fs-5 text-black">${item.name}</span>'s Post`;
-
-  let typeText = item.activityType == "Like" ? "Like" : "Commented On";
 
   activityContainer.innerHTML += `
   <div class="bg-white mt-3 p-md-3 p-2 rounded-3" ${clickOnPostSection}>
@@ -158,7 +156,7 @@ window.LoadPost = async function (postId) {
   await post.init(postId);
 
   if (!post.obj.isActive) {
-    await Reload();
+    await window.Reload();
 
     return;
   }
@@ -171,6 +169,8 @@ window.LoadPost = async function (postId) {
 };
 
 async function LoadSavedPosts() {
+  if (currentUser == null) return;
+
   let response = await currentUser.AllSavedPosts();
 
   if (response.valid) {
@@ -230,6 +230,8 @@ function CreateSavedPost(item) {
 }
 
 window.ClickUnSavePost = function (postId) {
+  ShowLoadingSection();
+
   ShowConfirmMessage("UnSave Post");
 
   let yesBtn = document.querySelector(".confirm-message button.yes");
@@ -237,6 +239,8 @@ window.ClickUnSavePost = function (postId) {
   yesBtn.onclick = async () => {
     await UnSavePost(postId);
   };
+
+  RemoveLoadingSection();
 };
 
 async function UnSavePost(postId) {
@@ -249,7 +253,7 @@ async function UnSavePost(postId) {
   await post.init(postId);
 
   if (!post.obj.isSaved) {
-    await Reload();
+    await window.Reload();
 
     return;
   }

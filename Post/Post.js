@@ -1,6 +1,5 @@
-import { Post } from "../Js/main.js";
-
-import { ShowAlert } from "../Js/helper.js";
+import {} from "../Js/main.js";
+import { Post, ShowAlert } from "../Js/helper.js";
 
 var content = document.querySelector(".content");
 
@@ -27,7 +26,7 @@ window.RefreshPosts = async function () {
   LoadPostInfo();
 };
 
-await RefreshPosts();
+RefreshPosts();
 
 async function GetPost() {
   let response = await Post.getPost(postId);
@@ -59,5 +58,6 @@ function LoadPostInfo() {
 
     return;
   }
+  
   content.innerHTML = CreatePost(post);
 }

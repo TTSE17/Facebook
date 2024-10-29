@@ -1,5 +1,7 @@
-import { Post } from "../Js/main.js";
-import { ShowAlert } from "../Js/helper.js";
+import {} from "../Js/main.js";
+import { Post, ShowAlert } from "../Js/helper.js";
+
+console.log("Screen");
 
 let editInfoBtn = document.querySelector(".navbar .edit-info");
 
@@ -31,11 +33,9 @@ window.RefreshPosts = async function () {
 await LoadPage();
 
 async function LoadPage() {
-  if (currentUser == null) return;
+  // ShowLoadingSection();
 
-  ShowLoadingSection();
-
-  await RefreshPage();
+  RefreshPage(); // wait
 
   RemoveLoadingSection();
 }
@@ -64,7 +64,7 @@ function LoadCurrentUserInfo() {
 editInfoBtn.addEventListener("click", () => {
   ShowLoadingSection();
 
-  ClickEditProfileItem();
+  window.ClickEditProfileItem();
 
   let toggleModelBtn = document.querySelector(".edit-profile button");
 
@@ -76,7 +76,7 @@ editInfoBtn.addEventListener("click", () => {
 changePasswordItem.addEventListener("click", () => {
   ShowLoadingSection();
 
-  ClickChangePasswordItem();
+  window.ClickChangePasswordItem();
 
   let toggleModelBtn = document.querySelector(".change-password button");
 
@@ -86,13 +86,13 @@ changePasswordItem.addEventListener("click", () => {
 });
 
 profileBtn.addEventListener("click", async () => {
-  LoadUserInfo(currentUser.obj.id);
+  window.LoadUserInfo(currentUser.obj.id);
 });
 
 createPostBtn.addEventListener("click", () => {
   ShowLoadingSection();
 
-  ManagePostSection();
+  window.ManagePostSection();
 
   let toggleModelBtn = document.querySelector(".manage-post button");
 
@@ -104,25 +104,25 @@ createPostBtn.addEventListener("click", () => {
 recentBtn.addEventListener("click", async () => {
   if (recentBtnActive) return;
 
-  ShowLoadingSection();
+  // ShowLoadingSection();
 
   recentBtnActive = true;
 
-  await LoadPosts();
+  LoadPosts(); // wait
 
-  RemoveLoadingSection();
+  // RemoveLoadingSection();
 });
 
 popularBtn.addEventListener("click", async () => {
   if (!recentBtnActive) return;
 
-  ShowLoadingSection();
+  // ShowLoadingSection();
 
   recentBtnActive = false;
 
-  await LoadPosts();
+  LoadPosts(); // wait
 
-  RemoveLoadingSection();
+  // RemoveLoadingSection();
 });
 
 /*

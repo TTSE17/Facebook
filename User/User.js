@@ -1,6 +1,6 @@
-import { Post } from "../Js/main.js";
+import {} from "../Js/main.js";
 
-import { User, ShowAlert } from "../Js/helper.js";
+import { User, Post, ShowAlert } from "../Js/helper.js";
 
 let profileImage = document.querySelector(".user-info .image img");
 
@@ -28,9 +28,13 @@ function Invalid() {
 let user = null;
 
 window.RefreshPage = async function () {
-  await Promise.all([LoadUserPosts(), GetUser()]);
+  // await Promise.all([LoadUserPosts(), GetUser()]);
+
+  await GetUser();
 
   LoadUserInfo();
+
+  LoadUserPosts(); // wait
 };
 
 window.RefreshPosts = async function () {
@@ -204,8 +208,8 @@ async function LoadUserPosts() {
 
     Post.RenderPosts(postsContainer);
   } else {
-    // ShowAlert("Error", response.error,'danger');
-    Invalid();
+    ShowAlert("Error", response.error,'danger');
+    // Invalid();
   }
 }
 

@@ -114,7 +114,7 @@ export class User {
 
         response.valid = true;
       } else if (data.status == 401) {
-        // UnAuthenication();
+        UnAuthenication();
       } else {
         response.error = (await data.json()).error;
       }
@@ -273,6 +273,490 @@ export class User {
       }
     } catch (error) {
       response.error = "Failed To retrieve saved posts";
+    } finally {
+      return response;
+    }
+  }
+}
+
+export class Post {
+  static posts = [];
+
+  static async FetchPosts(filterRequest) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        "https://victus.runasp.net/api/Posts/GetAllPosts",
+        {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filterRequest),
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        // response.error = (await data.json()).error;
+        response.error = "Failed to load post.";
+      }
+    } catch (error) {
+      response.error = "Failed to load post.";
+    } finally {
+      return response;
+    }
+  }
+
+  static RenderPosts(postsContainer) {
+    postsContainer.innerHTML = "";
+
+    Post.posts.forEach((post) => {
+      postsContainer.innerHTML += CreatePost(post);
+    });
+  }
+
+  static async AddPost(postRequest) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(`https://victus.runasp.net/api/Posts/Create`, {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postRequest),
+      });
+
+      if (data.ok) {
+        response.obj = await data.json();
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to add post.";
+    } finally {
+      return response;
+    }
+  }
+
+  static async getPost(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Posts/GetPost?id=${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to get post.";
+    } finally {
+      return response;
+    }
+  }
+
+  static async EditPost(postRequest) {
+    // text = encodeURIComponent(text);
+
+    let response = new Response();
+
+    try {
+      let data = await fetch(`https://victus.runasp.net/api/Posts/Edit`, {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postRequest),
+      });
+
+      if (data.ok) {
+        // response.obj = await data.json();
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to edit post.";
+    } finally {
+      return response;
+    }
+  }
+
+  static async ToggleActive(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Posts/ToggleActive/${postId}`,
+        {
+          method: "get",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to change the post status.";
+    } finally {
+      return response;
+    }
+  }
+
+  static async SavedPost(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/SavedPost/SavePost/${postId}`,
+        {
+          method: "get",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to save post.";
+    } finally {
+      return response;
+    }
+  }
+
+  static async UnSavedPost(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/SavedPost/UnSavePost/${postId}`,
+        {
+          method: "get",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to unsave post.";
+    } finally {
+      return response;
+    }
+  }
+
+  constructor() {
+    this.obj = null;
+  }
+
+  async init(postId) {
+    let response = await Post.getPost(postId);
+
+    if (!response.valid) {
+      ShowAlert("Error", "Failed to load post.", "danger");
+      return;
+    }
+
+    this.obj = response.obj;
+  }
+
+  async RefreshPostInfo() {
+    let post = this.obj;
+
+    let postId = post.id;
+
+    const totalLikesElement = document.querySelector(
+      `.content .post[id='${postId}'] .likes`
+    );
+
+    const totalCommentsElement = document.querySelector(
+      `.content .post[id='${postId}'] .comments`
+    );
+
+    const totalSharesElement = document.querySelector(
+      `.content .post[id='${postId}'] .shares`
+    );
+
+    totalLikesElement.innerHTML = HandleTotal(post.countLikes);
+    totalCommentsElement.innerHTML = HandleTotal(post.countComments);
+    totalSharesElement.innerHTML = HandleTotal(post.countShares);
+  }
+}
+
+export class Like {
+  static async RemoveLike(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Like/RemoveLike/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to remove like";
+    } finally {
+      return response;
+    }
+  }
+
+  static async AddLike(postId) {
+    let response = new Response();
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Like/AddLike/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to add like";
+    } finally {
+      return response;
+    }
+  }
+
+  static async GetLikers(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Posts/GetLikersOnPost/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed Get Likers";
+    } finally {
+      return response;
+    }
+  }
+}
+
+export class Comment {
+  static comments = [];
+
+  static async GetComments(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Posts/GetCommentsOnPost/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        this.comments = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to load comments.";
+    } finally {
+      return response;
+    }
+  }
+
+  static async AddComment(postId, text) {
+    let response = new Response();
+
+    text = encodeURIComponent(text);
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Comment/CreateComment/${postId}?text=${text}`,
+        {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to add comment.";
+    } finally {
+      return response;
+    }
+  }
+
+  static RenderComments() {
+    let commentsContent = document.querySelector(".comments .content");
+
+    commentsContent.innerHTML = "";
+
+    this.comments.forEach((comment) => {
+      window.CreateCommentNode(comment);
+    });
+  }
+
+  static async EditComment(commentId, text) {
+    let response = new Response();
+
+    text = encodeURIComponent(text);
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Comment/UpdateComment/${commentId}/${text}`,
+        {
+          method: "put",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to edit comment.";
+    } finally {
+      return response;
+    }
+  }
+
+  static async DeleteComment(commentId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Comment/DeleteComment/${commentId}`,
+        {
+          method: "delete",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to delete comment";
     } finally {
       return response;
     }
@@ -495,4 +979,8 @@ window.RemoveSection = function (e, sectionName) {
   } else {
     ShowAlert("Error", "Not Found", "danger");
   }
+};
+
+window.delay = function (ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };

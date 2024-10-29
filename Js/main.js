@@ -1,5 +1,8 @@
 import {
   User,
+  Post,
+  Like,
+  Comment,
   ShowConfirmMessage,
   ShowAlert,
   HandleTotal,
@@ -7,16 +10,48 @@ import {
   generateGUID,
 } from "../Js/helper.js";
 
-import { getToken } from "../Js/token.js";
-let token = getToken();
-
 window.defaultImage = "../imgs/d1.png";
 
-let imageElement, removeImageBtn, imageInput, uploadButton;
+let userRequest = null,
+  imageElement,
+  removeImageBtn,
+  imageInput,
+  uploadButton;
 
-window.delay = function (ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+window.UnAuthenication = function () {
+  window.location.href = "../Login_Signup/login_signup.html";
+
+  alert("You need to log in");
+
+  throw new Error("UN"); // Throw an error to stop further execution
 };
+
+window.currentUser = null;
+
+async function GetCurrentUser() {
+  let user = new User();
+
+  let response = await user.Profile();
+
+  if (!response.valid) {
+    // UnAuthenication();
+
+    ShowAlert("Error", response.error, "danger");
+
+    return;
+  }
+
+  user.obj = response.obj;
+  user.id = response.obj.id;
+
+  window.currentUser = user;
+}
+
+window.ShowLoadingSection();
+
+await GetCurrentUser();
+
+// window.RemoveLoadingSection();
 
 window.SetActivityType = function (type) {
   localStorage.setItem("activityType", type);
@@ -32,14 +67,6 @@ window.ClickProfileOption = function (type) {
   window.location.href = `../Activity/Activity.html`;
 };
 
-function UnAuthenication() {
-  window.location.href = "../Login_Signup/login_signup.html";
-
-  alert("You need to log in");
-
-  throw new Error("UN"); // Throw an error to stop further execution
-}
-
 window.Reload = async function () {
   ShowLoadingSection();
 
@@ -49,6 +76,12 @@ window.Reload = async function () {
 
   RemoveLoadingSection();
 };
+
+window.GetImage = function (image) {
+  return image != null ? image : defaultImage;
+};
+
+//
 
 window.CreateShowPostMediaSection = async function (postId) {
   ShowLoadingSection();
@@ -460,513 +493,7 @@ function generateMediaItem(media, enable = true) {
   return "";
 }
 
-export class Post {
-  static posts = [];
-
-  static async FetchPosts(filterRequest) {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        "https://victus.runasp.net/api/Posts/GetAllPosts",
-        {
-          method: "post",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(filterRequest),
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        // response.error = (await data.json()).error;
-        response.error = "Failed to load post.";
-      }
-    } catch (error) {
-      response.error = "Failed to load post.";
-    } finally {
-      return response;
-    }
-  }
-
-  static RenderPosts(postsContainer) {
-    postsContainer.innerHTML = "";
-
-    Post.posts.forEach((post) => {
-      postsContainer.innerHTML += CreatePost(post);
-    });
-  }
-
-  static async AddPost(postRequest) {
-    let response = new Response();
-
-    try {
-      let data = await fetch(`https://victus.runasp.net/api/Posts/Create`, {
-        method: "post",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(postRequest),
-      });
-
-      if (data.ok) {
-        response.obj = await data.json();
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to add post.";
-      console.log(error);
-    } finally {
-      return response;
-    }
-  }
-
-  static async getPost(postId) {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Posts/GetPost?id=${postId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to get post.";
-    } finally {
-      return response;
-    }
-  }
-
-  static async EditPost(postRequest) {
-    // text = encodeURIComponent(text);
-
-    let response = new Response();
-
-    try {
-      let data = await fetch(`https://victus.runasp.net/api/Posts/Edit`, {
-        method: "post",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(postRequest),
-      });
-
-      if (data.ok) {
-        // response.obj = await data.json();
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to edit post.";
-    } finally {
-      return response;
-    }
-  }
-
-  static async ToggleActive(postId) {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Posts/ToggleActive/${postId}`,
-        {
-          method: "get",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to change the post status.";
-    } finally {
-      return response;
-    }
-  }
-
-  static async SavedPost(postId) {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/SavedPost/SavePost/${postId}`,
-        {
-          method: "get",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to save post.";
-    } finally {
-      return response;
-    }
-  }
-
-  static async UnSavedPost(postId) {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/SavedPost/UnSavePost/${postId}`,
-        {
-          method: "get",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to unsave post.";
-    } finally {
-      return response;
-    }
-  }
-
-  constructor() {
-    this.obj = null;
-  }
-
-  async init(postId) {
-    let response = await Post.getPost(postId);
-
-    if (!response.valid) {
-      ShowAlert("Error", "Failed to load post.", "danger");
-      return;
-    }
-
-    this.obj = response.obj;
-  }
-
-  async RefreshPostInfo() {
-    let postId = this.obj.id;
-
-    let post = this.obj;
-
-    const totalLikesElement = document.querySelector(
-      `.content .post[id='${postId}'] .likes`
-    );
-
-    const totalCommentsElement = document.querySelector(
-      `.content .post[id='${postId}'] .comments`
-    );
-
-    const totalSharesElement = document.querySelector(
-      `.content .post[id='${postId}'] .shares`
-    );
-
-    totalLikesElement.innerHTML = HandleTotal(post.countLikes);
-    totalCommentsElement.innerHTML = HandleTotal(post.countComments);
-    totalSharesElement.innerHTML = HandleTotal(post.countShares);
-  }
-
-  async RemoveLike() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Like/RemoveLike/${this.obj.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to remove like";
-    } finally {
-      return response;
-    }
-  }
-
-  async AddLike() {
-    let response = new Response();
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Like/AddLike/${this.obj.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to add like";
-    } finally {
-      return response;
-    }
-  }
-
-  async GetLikers() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Posts/GetLikersOnPost/${this.obj.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed Get Likers";
-    } finally {
-      return response;
-    }
-  }
-
-  async GetComments() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Posts/GetCommentsOnPost/${this.obj.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to load comments.";
-    } finally {
-      return response;
-    }
-  }
-
-  async AddComment(text) {
-    let response = new Response();
-
-    text = encodeURIComponent(text);
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Comment/CreateComment/${this.obj.id}?text=${text}`,
-        {
-          method: "post",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to add comment.";
-    } finally {
-      return response;
-    }
-  }
-
-  RenderComments() {
-    let commentsContent = document.querySelector(".comments .content");
-
-    commentsContent.innerHTML = "";
-
-    this.comments.forEach((comment) => {
-      CreateCommentNode(comment);
-    });
-  }
-
-  async DeleteComment(commentId) {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Comment/DeleteComment/${commentId}`,
-        {
-          method: "delete",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to delete comment";
-    } finally {
-      return response;
-    }
-  }
-
-  async EditComment(commentId, text) {
-    let response = new Response();
-
-    text = encodeURIComponent(text);
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Comment/UpdateComment/${commentId}/${text}`,
-        {
-          method: "put",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to edit comment.";
-    } finally {
-      return response;
-    }
-  }
-}
-
-window.currentUser = null;
-
-let userRequest = null;
-
-ShowLoadingSection();
-
-await GetCurrentUser();
-
-async function GetCurrentUser() {
-  let user = new User();
-
-  let response = await user.Profile();
-
-  if (!response.valid) {
-    UnAuthenication();
-
-    return;
-  }
-
-  user.obj = response.obj;
-  user.id = response.obj.id;
-
-  currentUser = user;
-}
-
-window.GetImage = function (image) {
-  return image != null ? image : defaultImage;
-};
+//
 
 window.LoadUserInfo = async function (userId) {
   ShowLoadingSection();
@@ -1463,7 +990,7 @@ window.ManagePostSection = async function (postId = null) {
 
             <div class="modal-header">
 
-              <h4 class="modal-title">${
+              <h4 class="modal-title flex-grow-1 text-center">${
                 postId == null ? "Create" : "Edit"
               } Post</h4>
 
@@ -1558,7 +1085,7 @@ window.ManagePostSection = async function (postId = null) {
       if (post.obj.media.length) {
         MediaList.push(...post.obj.media);
 
-        await RenderMediaPreview();
+        RenderMediaPreview();
       }
     } else {
       postBtn.classList.remove("disabled");
@@ -1709,7 +1236,7 @@ async function SetMedia(e) {
     });
   }
 
-  await RenderMediaPreview();
+  RenderMediaPreview();
 
   EnablePostBtn();
 
@@ -1810,7 +1337,7 @@ async function uploadMedia() {
   return true;
 }
 
-window.AddPost = async function () {
+async function AddPost() {
   ShowLoadingSection();
 
   let postInput = document.querySelector(".manage-post textarea");
@@ -1842,25 +1369,27 @@ window.AddPost = async function () {
     return;
   }
 
-  await RefreshPosts();
+  window.RefreshPosts(); // wait
 
   let closeBtn = document.querySelector(".manage-post .btn-close");
 
   closeBtn.click();
 
   RemoveLoadingSection();
-};
+}
 
 window.ClickOptionsPostBtn = async function (event, postId) {
   let menu = event.currentTarget.nextElementSibling;
 
   if (!menu.classList.contains("show")) return;
 
+  menu.classList.add("d-none");
+
   ShowLoadingSection();
 
   let options = menu.children;
 
-  await delay(199);
+  // await delay(199);
 
   let post = new Post();
   await post.init(postId);
@@ -1885,10 +1414,14 @@ window.ClickOptionsPostBtn = async function (event, postId) {
     options[2].classList.add("d-none");
   }
 
+  menu.classList.remove("d-none");
+
   RemoveLoadingSection();
 };
 
 window.ClickSavePost = async function (event, postId) {
+  ShowLoadingSection();
+
   let element = event.currentTarget;
 
   let text = element.textContent;
@@ -1919,6 +1452,8 @@ window.ClickSavePost = async function (event, postId) {
   yesBtn.onclick = async () => {
     await ToggleSavedPost(postId);
   };
+
+  RemoveLoadingSection();
 };
 
 window.ToggleSavedPost = async function (postId) {
@@ -1974,7 +1509,7 @@ window.ClickEditPost = async function (postId) {
 
   post.RefreshPostInfo();
 
-  await ManagePostSection(postId);
+  await window.ManagePostSection(postId);
 
   let toggleModelBtn = document.querySelector(".manage-post button");
 
@@ -1983,7 +1518,7 @@ window.ClickEditPost = async function (postId) {
   RemoveLoadingSection();
 };
 
-window.EditPost = async function (postId) {
+async function EditPost(postId) {
   ShowLoadingSection();
 
   let closeBtn = document.querySelector(".manage-post .btn-close");
@@ -2025,14 +1560,16 @@ window.EditPost = async function (postId) {
 
   closeBtn.click();
 
-  await window.RefreshPosts();
+  window.RefreshPosts(); // wait
 
   RemoveLoadingSection();
-};
+}
 
 let headerActivePost = null;
 
 window.ClickMoveToTrash = async function (postId) {
+  ShowLoadingSection();
+
   let post = new Post();
   await post.init(postId);
 
@@ -2053,9 +1590,13 @@ window.ClickMoveToTrash = async function (postId) {
   yesBtn.onclick = async () => {
     await ToggleActivePost(postId);
   };
+
+  RemoveLoadingSection();
 };
 
 window.ClickRestorePost = async function (postId) {
+  ShowLoadingSection();
+
   let post = new Post();
   await post.init(postId);
 
@@ -2074,6 +1615,8 @@ window.ClickRestorePost = async function (postId) {
   yesBtn.onclick = async () => {
     await ToggleActivePost(postId);
   };
+
+  RemoveLoadingSection();
 };
 
 async function ToggleActivePost(postId) {
@@ -2139,7 +1682,9 @@ window.ClickLikeBtn = async function (event, postId) {
     return;
   }
 
-  let response = isLiked ? await post.RemoveLike() : await post.AddLike();
+  let response = isLiked
+    ? await Like.RemoveLike(postId)
+    : await Like.AddLike(postId);
 
   isClickLike = false;
 
@@ -2170,9 +1715,9 @@ window.ClickLikesBtn = async function (postId) {
     return;
   }
 
-  post.RefreshPostInfo();
+  let response = await Like.GetLikers(postId);
 
-  let response = await post.GetLikers();
+  post.RefreshPostInfo();
 
   if (!response.valid) {
     ShowAlert("Error", "Failed to display likers", "danger");
@@ -2236,7 +1781,7 @@ function CreateLikerNode(liker) {
       <img src="${GetImage(
         liker.imagePath
       )}" decoding="async" alt="${defaultImage}"
-      class="w-100 h-100" />
+      class="w-100 h-100 rounded-circle border" />
     </div>
 
       ${liker.name}
@@ -2265,7 +1810,7 @@ window.ClickCommentsBtn = async function (postId) {
 
   post.RefreshPostInfo();
 
-  let response = await post.GetComments();
+  let response = await Comment.GetComments(post.obj.id);
 
   if (!response.valid) {
     ShowAlert("Error", response.error, "danger");
@@ -2275,11 +1820,9 @@ window.ClickCommentsBtn = async function (postId) {
     return;
   }
 
-  post.comments = response.obj;
+  CreateCommentsSection(Comment.comments.length, isActive);
 
-  CreateCommentsSection(post.comments.length, isActive);
-
-  post.RenderComments();
+  Comment.RenderComments();
 
   RemoveLoadingSection();
 };
@@ -2346,7 +1889,7 @@ function CreateCommentsSection(totalComments, enableCreateComment = true) {
   document.body.classList.add("hide-scrollbar");
 }
 
-function CreateCommentNode(comment) {
+window.CreateCommentNode = function (comment) {
   let content = document.querySelector(".comments .content");
 
   let addOptionsComment =
@@ -2409,7 +1952,7 @@ function CreateCommentNode(comment) {
 
   </div>
   `;
-}
+};
 
 window.TypeComment = function (event, buttonName) {
   let textarea = event.currentTarget;
@@ -2448,7 +1991,7 @@ window.PostComment = async function () {
 
   let commentInput = document.querySelector(".comments textarea");
 
-  let response = await post.AddComment(commentInput.value);
+  let response = await Comment.AddComment(postId, commentInput.value);
 
   if (!response.valid) {
     ShowAlert("Error", response.error, "danger");
@@ -2494,7 +2037,7 @@ window.ClickEditComment = async function (commentId) {
 let comment;
 
 function EditcommentSection(commentId) {
-  comment = post.comments.find((e) => {
+  comment = Comment.comments.find((e) => {
     return e.id == commentId;
   });
 
@@ -2577,6 +2120,7 @@ function EditcommentSection(commentId) {
 
 window.EditComment = async function (commentId) {
   ShowLoadingSection();
+
   let closeEditCommentBtn = document.querySelector(".edit-comment .btn-close");
 
   let postId = post.obj.id;
@@ -2601,7 +2145,7 @@ window.EditComment = async function (commentId) {
 
   let text = postInput.value.trim();
 
-  let response = await post.EditComment(commentId, text);
+  let response = await Comment.EditComment(commentId, text);
 
   if (!response.valid) {
     ShowAlert("Error", response.error, "danger");
@@ -2644,7 +2188,7 @@ window.ClickDeleteComment = async function (commentId) {
   yesBtn.onclick = async () => {
     await DeleteComment(commentId);
   };
-  
+
   RemoveLoadingSection();
 };
 
@@ -2671,7 +2215,7 @@ async function DeleteComment(commentId) {
     return;
   }
 
-  let response = await post.DeleteComment(commentId);
+  let response = await Comment.DeleteComment(commentId);
 
   if (!response.valid) {
     ShowAlert("Error", response.error, "danger");
@@ -2817,7 +2361,7 @@ window.SharePost = async function (postId) {
 
   closeBtn.click();
 
-  await window.RefreshPosts();
+  window.RefreshPosts(); // wait
 
   RemoveLoadingSection();
 };

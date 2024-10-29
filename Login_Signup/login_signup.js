@@ -56,8 +56,6 @@ signupForm.addEventListener("submit", async (e) => {
 
   let response = await User.Register(userRequest);
 
-  console.log(response);
-
   Result(response);
 });
 
