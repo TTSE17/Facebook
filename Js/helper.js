@@ -707,7 +707,7 @@ export class Comment {
 
     try {
       let data = await fetch(
-        `https://victus.runasp.net/api/Comment/UpdateComment/${commentId}/${text}`,
+        `https://victus.runasp.net/api/Comment/UpdateComment/${commentId}?text=${text}`,
         {
           method: "put",
           headers: {
