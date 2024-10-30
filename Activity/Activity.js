@@ -1,5 +1,6 @@
 import {} from "../Js/main.js";
-import { Post, ShowAlert, ShowConfirmMessage } from "../Js/helper.js";
+import { Post } from "../Js/clsPost.js";
+import { ShowAlert, ShowConfirmMessage } from "../Js/helper.js";
 
 let trashBtn = document.querySelector("div .left-section ul a[href='#trash']");
 let activityLogBtn = document.querySelector(

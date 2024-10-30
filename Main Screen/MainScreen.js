@@ -1,5 +1,6 @@
 import {} from "../Js/main.js";
-import { Post, ShowAlert } from "../Js/helper.js";
+import { Post } from "../Js/clsPost.js";
+import { ShowAlert } from "../Js/helper.js";
 
 console.log("Screen");
 

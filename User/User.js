@@ -1,6 +1,7 @@
 import {} from "../Js/main.js";
-
-import { User, Post, ShowAlert } from "../Js/helper.js";
+import { User } from "../Js/clsUser.js";
+import { Post } from "../Js/clsPost.js";
+import { ShowAlert } from "../Js/helper.js";
 
 let profileImage = document.querySelector(".user-info .image img");
 
@@ -149,7 +150,7 @@ function CreateCurrentUserProfile() {
 window.ClickEditProfile = function () {
   ShowLoadingSection();
 
-  ClickEditProfileItem();
+  window.ClickEditProfileItem();
 
   let toggleModalBtn = document.querySelector(".edit-profile button");
 
@@ -161,7 +162,7 @@ window.ClickEditProfile = function () {
 window.ClickChangePassword = function () {
   ShowLoadingSection();
 
-  ClickChangePasswordItem();
+  window.ClickChangePasswordItem();
 
   let toggleModalBtn = document.querySelector(".change-password button");
 
@@ -208,7 +209,7 @@ async function LoadUserPosts() {
 
     Post.RenderPosts(postsContainer);
   } else {
-    ShowAlert("Error", response.error,'danger');
+    ShowAlert("Error", response.error, "danger");
     // Invalid();
   }
 }
