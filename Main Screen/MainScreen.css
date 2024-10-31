@@ -1,29 +1,3 @@
-* {
-  font-family: "Cairo", sans-serif;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-a {
-  /* text-decoration: none; */
-}
-
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: var(--background);
-  /* position: relative; */
-}
-
 .navbar .container .navbar-brand {
   letter-spacing: 1.7px;
 }

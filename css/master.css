@@ -1,5 +1,4 @@
 * {
-  font-family: "Cairo", sans-serif;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -25,7 +24,7 @@
   --green-color: #22c55e;
   --red-color: #f44336;
   --grey-color: #888;
-  --bs-border-color :#dcd6d6;
+  --bs-border-color: #dcd6d6;
 }
 
 html {
@@ -51,8 +50,8 @@ ul {
 }
 
 body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: var(--background);
-  /* font-family: "Open-Sans", sans-serif; */
   margin: 0;
   /* position: relative; */
 }
@@ -96,7 +95,7 @@ body.hide-scrollbar {
     font-size: 0.79rem;
   }
 
-  .change-password .modal-header h4 ,
+  .change-password .modal-header h4,
   .change-password .modal-body label {
     font-size: 1rem !important;
   }
