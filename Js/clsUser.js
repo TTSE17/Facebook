@@ -44,13 +44,11 @@ export class User {
       });
 
       if (data.ok) {
-        response.obj = await data.json();
-
         response.valid = true;
       } else {
         response.error = (await data.json()).error;
       }
-    } catch (error) {
+    } catch (ex) {
       response.error = "Register failed";
     } finally {
       return response;

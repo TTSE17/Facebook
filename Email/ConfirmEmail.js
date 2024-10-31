@@ -5,12 +5,10 @@ let container = document.querySelector(".container");
 
 const token = getQueryParam("token") ?? null;
 
-console.log(token);
-
 Verify();
 
 async function Verify() {
-  if (token == null) {
+  if (token == null || token == "" || token.length < 275) {
     invalid("It looks like this verification link is invalid!");
 
     return;

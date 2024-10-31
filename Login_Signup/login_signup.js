@@ -59,7 +59,7 @@ signupForm.addEventListener("submit", async (e) => {
 
   if (response.valid) {
     ShowAlert(
-      "Error",
+      "Done!",
       "Registration successful! Please check your email and click the confirmation link to complete your registration",
       "success"
     );
