@@ -57,7 +57,17 @@ signupForm.addEventListener("submit", async (e) => {
 
   let response = await User.Register(userRequest);
 
-  Result(response);
+  if (response.valid) {
+    ShowAlert(
+      "Error",
+      "Registration successful! Please check your email and click the confirmation link to complete your registration",
+      "success"
+    );
+  } else {
+    ShowAlert("Error", response.error, "danger");
+  }
+
+  RemoveLoadingSection();
 });
 
 function GetLoginRequest() {
@@ -79,10 +89,6 @@ loginForm.addEventListener("submit", async (e) => {
 
   let response = await User.Login(loginRequest);
 
-  Result(response);
-});
-
-function Result(response) {
   if (response.valid) {
     let token = response.obj.token;
 
@@ -93,4 +99,4 @@ function Result(response) {
     ShowAlert("Error", response.error, "danger");
   }
   RemoveLoadingSection();
-}
+});

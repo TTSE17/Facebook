@@ -4,11 +4,6 @@ import { ShowAlert } from "../Js/helper.js";
 
 var content = document.querySelector(".content");
 
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
-
 const postId = getQueryParam("postId") ?? 0;
 
 function Invalid() {

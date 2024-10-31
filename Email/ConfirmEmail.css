@@ -1,0 +1,21 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.overlay {
+  background-color: rgb(255 255 255 /59%);
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: #45a049;
+  color: white;
+}

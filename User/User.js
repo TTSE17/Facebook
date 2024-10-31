@@ -11,11 +11,6 @@ let profileOptions = document.querySelector(".profile-options");
 
 var postsContainer = document.querySelector(".posts .content");
 
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
-
 const userId = getQueryParam("userId") ?? 0;
 
 function Invalid() {

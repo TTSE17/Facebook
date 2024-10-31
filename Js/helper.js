@@ -114,6 +114,38 @@ export function generateGUID() {
   });
 }
 
+var LoadingSection = document.querySelector(".loading");
+
+window.ShowLoadingSection = function () {
+  LoadingSection.classList.remove("d-none");
+};
+
+window.RemoveLoadingSection = function () {
+  LoadingSection.classList.add("d-none");
+};
+
+window.RemoveSection = function (e, sectionName) {
+  document.body.classList.remove("hide-scrollbar");
+
+  // if (e != null) e.preventDefault();
+
+  let section = document.querySelector(`${sectionName}`);
+  if (section != null) {
+    section.remove();
+  } else {
+    ShowAlert("Error", "Not Found", "danger");
+  }
+};
+
+window.delay = function (ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+window.getQueryParam = function (param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+};
+
 window.HandleDate = function (dateText) {
   // dateText = "2024-07-21T09:17:17";
 
@@ -199,31 +231,4 @@ window.HandleDate3 = function (dateText) {
   const timePart = `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
 
   return `${datePart} ${timePart}`;
-};
-
-var LoadingSection = document.querySelector(".loading");
-
-window.ShowLoadingSection = function () {
-  LoadingSection.classList.remove("d-none");
-};
-
-window.RemoveLoadingSection = function () {
-  LoadingSection.classList.add("d-none");
-};
-
-window.RemoveSection = function (e, sectionName) {
-  document.body.classList.remove("hide-scrollbar");
-
-  // if (e != null) e.preventDefault();
-
-  let section = document.querySelector(`${sectionName}`);
-  if (section != null) {
-    section.remove();
-  } else {
-    ShowAlert("Error", "Not Found", "danger");
-  }
-};
-
-window.delay = function (ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 };
