@@ -16,8 +16,7 @@ let passwordInputLogin = document.querySelector(
   ".login-form input[type='password']"
 );
 
-// let ForgotPassword = document.querySelector(".login-form a.forgot-password");
-
+let ForgotAccount = document.querySelector(".login-form a.forgot-account");
 let loginLink = document.querySelector(".signup-form a.login");
 
 let signupForm = document.querySelector(".signup-form");
@@ -28,6 +27,10 @@ let emailInputSignup = document.querySelector(
 let passwordInputSignup = document.querySelector(
   ".signup-form input[type='password']"
 );
+
+ForgotAccount.addEventListener("click", () => {
+  window.location.href = "../Recover/recover.html";
+});
 
 signupLink.addEventListener("click", Flip);
 loginLink.addEventListener("click", Flip);

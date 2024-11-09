@@ -1,8 +1,7 @@
 import {} from "../Js/main.js";
 import { Post } from "../Js/clsPost.js";
 import { ShowAlert } from "../Js/helper.js";
-
-console.log("Screen");
+import {} from "../Js/clsPassword.js";
 
 let editInfoBtn = document.querySelector(".navbar .edit-info");
 

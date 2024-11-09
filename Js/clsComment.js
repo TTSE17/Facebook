@@ -139,8 +139,6 @@ class Comment {
   }
 }
 
-console.log("COMMENT");
-
 let post;
 
 window.ClickCommentsBtn = async function (postId) {

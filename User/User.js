@@ -2,6 +2,7 @@ import {} from "../Js/main.js";
 import { User } from "../Js/clsUser.js";
 import { Post } from "../Js/clsPost.js";
 import { ShowAlert } from "../Js/helper.js";
+import {} from "../Js/clsPassword.js";
 
 let profileImage = document.querySelector(".user-info .image img");
 

@@ -5,9 +5,10 @@ a {
 body {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: var(--main-color);
+  background-color: #e9ebee;
   padding: 30px;
   position: relative;
 }
@@ -16,6 +17,12 @@ body {
   position: fixed;
   left: 0;
   top: 0;
+}
+
+.main-title {
+  font-weight: 700;
+  font-size: 51px;
+  letter-spacing: 1px;
 }
 
 .contain {
@@ -207,9 +214,8 @@ body {
 }
 
 .form-content .text {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  color: #333;
   text-align: center;
   margin-top: 25px;
 }
@@ -219,7 +225,7 @@ body {
 }
 
 .form-content .input-boxes .button {
-  margin-top: 40px;
+  margin-top: 17px;
 }
 
 .form-content .input-boxes .button input {
@@ -248,6 +254,10 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 767px) {
+  .main-title {
+    font-size: 39px;
+    /* letter-spacing: 0; */
+  }
   .contain .cover {
     display: none;
   }

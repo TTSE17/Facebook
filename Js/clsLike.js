@@ -85,8 +85,6 @@ class Like {
   }
 }
 
-console.log("LIKE");
-
 let isClickLike = false;
 
 window.ClickLikeBtn = async function (event, postId) {

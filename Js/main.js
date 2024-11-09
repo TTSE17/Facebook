@@ -2,8 +2,6 @@ import {} from "../Js/clsToken.js";
 import { GetCurrentUser } from "../Js/clsUser.js";
 import { ShowAlert } from "../Js/helper.js";
 
-console.log("main");
-
 window.defaultImage = "../imgs/d1.png";
 
 window.UnAuthenication = function () {

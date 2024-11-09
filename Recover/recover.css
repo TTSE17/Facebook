@@ -26,7 +26,26 @@ body {
   background-color: rgb(255 255 255 /59%);
 }
 
-.btn {
+.box {
+  max-width: 399px;
+  margin: auto;
+  background-color: white;
+  border-color: #abababad !important;
+}
+
+.box h5 {
+  border-bottom: 1px solid #abababad;
+}
+
+.box input {
+  border-color: #abababad;
+}
+
+.box .footer {
+  border-top: 1px solid #abababad;
+}
+
+.login {
   display: inline-block;
   padding: 10px 20px;
   background-color: #4caf50;
@@ -35,7 +54,7 @@ body {
   border-radius: 5px;
 }
 
-.btn:hover {
+.login:hover {
   background-color: #45a049;
   color: white;
 }

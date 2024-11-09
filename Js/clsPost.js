@@ -273,8 +273,6 @@ export class Post {
   }
 }
 
-console.log("POST");
-
 //
 
 window.CreateShowPostMediaSection = async function (postId) {
