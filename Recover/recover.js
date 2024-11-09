@@ -191,12 +191,12 @@ async function savePassword() {
 
 function finished() {
   document.querySelector(".finished .container").innerHTML = `
-    <h1 class="mt-5 text-success">Email Verified!</h1>
+    <h1 class="mt-5 text-success">Password Reset Successful!</h1>
 
     <p>
-        Your email has been successfully verified.
+        Your password has been successfully reset.
         <br />
-        You can now log in to your account.
+        You can now log in with your new password.
     </p>
     
     <a href="../Login_Signup/login_signup.html" class="login">Go to Login</a>
