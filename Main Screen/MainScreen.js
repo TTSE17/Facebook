@@ -104,25 +104,25 @@ createPostBtn.addEventListener("click", () => {
 recentBtn.addEventListener("click", async () => {
   if (recentBtnActive) return;
 
-  // ShowLoadingSection();
+  ShowLoadingSection();
 
   recentBtnActive = true;
 
-  LoadPosts(); // wait
+  await LoadPosts();
 
-  // RemoveLoadingSection();
+  RemoveLoadingSection();
 });
 
 popularBtn.addEventListener("click", async () => {
   if (!recentBtnActive) return;
 
-  // ShowLoadingSection();
+  ShowLoadingSection();
 
   recentBtnActive = false;
 
-  LoadPosts(); // wait
+  await LoadPosts();
 
-  // RemoveLoadingSection();
+  RemoveLoadingSection();
 });
 
 /*

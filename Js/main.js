@@ -1,5 +1,5 @@
 import {} from "../Js/clsToken.js";
-import { GetCurrentUser } from "../Js/clsUser.js";
+import { GetUserInfoFromStorrage, User } from "../Js/clsUser.js";
 import { ShowAlert } from "../Js/helper.js";
 
 window.defaultImage = "../imgs/d1.png";
@@ -16,7 +16,12 @@ window.currentUser = null;
 
 window.ShowLoadingSection();
 
-await GetCurrentUser();
+var userInfo = GetUserInfoFromStorrage();
+
+var user = new User(userInfo.id);
+user.obj = userInfo;
+
+window.currentUser = user;
 
 // window.RemoveLoadingSection();
 

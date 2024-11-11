@@ -230,7 +230,15 @@ export class User {
   }
 }
 
-export async function GetCurrentUser() {
+export function SaveUserInfoInStorrage(user) {
+  localStorage.setItem("currentUser", JSON.stringify(user));
+}
+
+export function GetUserInfoFromStorrage() {
+  return JSON.parse(localStorage.getItem("currentUser"));
+}
+
+async function UpdateCurrentUser() {
   let user = new User();
 
   let response = await user.Profile();
@@ -537,7 +545,7 @@ window.SaveEditProfile = async function () {
     return;
   }
 
-  await GetCurrentUser();
+  await UpdateCurrentUser();
 
   RefreshPage(); // wait
 

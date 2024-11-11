@@ -1,5 +1,5 @@
 import { saveToken, removeToken } from "../Js/clsToken.js";
-import { User } from "../Js/clsUser.js";
+import { User, SaveUserInfoInStorrage } from "../Js/clsUser.js";
 import { ShowAlert } from "../Js/helper.js";
 
 removeToken();
@@ -96,6 +96,8 @@ loginForm.addEventListener("submit", async (e) => {
     let token = response.obj.token;
 
     saveToken(token);
+
+    SaveUserInfoInStorrage(response.obj.user);
 
     window.location.href = "../Main Screen/MainScreen.html";
   } else {
