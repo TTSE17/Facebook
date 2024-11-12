@@ -34,7 +34,6 @@ class Comment {
   }
 
   static async AddComment(postId, text) {
-    console.log(text);
     let response = new Response();
 
     text = encodeURIComponent(text);
@@ -360,7 +359,7 @@ window.PostComment = async function () {
     return;
   }
 
-  commentInput.textContent = "";
+  commentInput.value = "";
 
   ClickCommentsBtn(postId); // wait
 
@@ -528,6 +527,8 @@ window.EditComment = async function (commentId) {
 };
 
 window.ClickDeleteComment = async function (commentId) {
+  if (post.obj == null) return;
+
   ShowLoadingSection();
 
   let postId = post.obj.id;

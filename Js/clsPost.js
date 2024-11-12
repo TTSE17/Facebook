@@ -235,6 +235,36 @@ export class Post {
     }
   }
 
+  static async DeletePost(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Posts/DeletePost/${postId}`,
+        {
+          method: "delete",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to delete post" + error;
+    } finally {
+      return response;
+    }
+  }
+
   constructor() {
     this.obj = null;
   }
@@ -399,7 +429,9 @@ window.CreatePost = function (post) {
         >Restore
     </li>
 
-    <li class="dropdown-item" role="button">Delete</li>
+    <li class="dropdown-item" role="button" onclick="ClickDeletePost(${post.id})">
+      Delete
+    </li>
   </ul>
 `;
 
@@ -1373,9 +1405,9 @@ async function ToggleActivePost(postId) {
 
   let closeBtn = document.querySelector(".confirm-message .btn-close");
 
-  let isActive = post.obj.isActive;
-
   closeBtn.click();
+
+  let isActive = post.obj.isActive;
 
   if (
     headerActivePost == null ||
@@ -1537,3 +1569,61 @@ window.SharePost = async function (postId) {
 
   RemoveLoadingSection();
 };
+
+window.ClickDeletePost = async function (postId) {
+  ShowLoadingSection();
+
+  var post = new Post();
+
+  await post.init(postId);
+
+  if (post.obj.isActive) {
+    await Reload();
+
+    return;
+  }
+
+  ShowConfirmMessage("Delete Post");
+
+  let yesBtn = document.querySelector(".confirm-message button.yes");
+
+  yesBtn.onclick = async () => {
+    await DeletePost(postId);
+  };
+
+  RemoveLoadingSection();
+};
+
+async function DeletePost(postId) {
+  ShowLoadingSection();
+
+  var post = new Post();
+
+  await post.init(postId);
+
+  let closeBtn = document.querySelector(".confirm-message .btn-close");
+
+  closeBtn.click();
+
+  let isActive = post.obj.isActive;
+
+  if (isActive) {
+    await Reload();
+
+    return;
+  }
+
+  let response = await Post.DeletePost(postId);
+
+  if (!response.valid) {
+    ShowAlert("Error", response.error, "danger");
+
+    RemoveLoadingSection();
+
+    return;
+  }
+
+  await window.RefreshPosts();
+
+  RemoveLoadingSection();
+}
