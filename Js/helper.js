@@ -203,7 +203,7 @@ window.HandleDate2 = function (dateText) {
 
   let months = days / 30;
 
-  if (months < 12) return parseInt(months) + "m";
+  if (months < 12) return parseInt(months) + "M";
 
   let years = months / 12;
 

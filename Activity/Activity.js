@@ -41,11 +41,11 @@ window.RefreshPosts = function () {
 RefreshPosts();
 
 async function ClickTrash() {
-  // ShowLoadingSection();
+  ShowLoadingSection();
 
-  LoadTrash(); // wait
+  await LoadTrash();
 
-  // RemoveLoadingSection();
+  RemoveLoadingSection();
 }
 
 async function ClickActivityLog() {
@@ -154,7 +154,7 @@ window.LoadPost = async function (postId) {
   ShowLoadingSection();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (!post.obj.isActive) {
     await window.Reload();
@@ -251,7 +251,7 @@ async function UnSavePost(postId) {
   closeBtn.click();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (!post.obj.isSaved) {
     await window.Reload();

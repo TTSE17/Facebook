@@ -144,7 +144,7 @@ window.ClickCommentsBtn = async function (postId) {
   ShowLoadingSection();
 
   post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isActive = post.obj.isActive;
 
@@ -325,7 +325,7 @@ window.PostComment = async function () {
 
   let postId = post.obj.id;
 
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isActive = post.obj.isActive;
 
@@ -373,7 +373,7 @@ window.ClickEditComment = async function (commentId) {
 
   let postId = post.obj.id;
 
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isActive = post.obj.isActive;
 
@@ -489,7 +489,7 @@ window.EditComment = async function (commentId) {
 
   let postId = post.obj.id;
 
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isActive = post.obj.isActive;
 
@@ -533,7 +533,7 @@ window.ClickDeleteComment = async function (commentId) {
 
   let postId = post.obj.id;
 
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isActive = post.obj.isActive;
 
@@ -567,7 +567,7 @@ async function DeleteComment(commentId) {
 
   let postId = post.obj.id;
 
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isActive = post.obj.isActive;
 

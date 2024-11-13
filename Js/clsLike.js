@@ -97,7 +97,7 @@ window.ClickLikeBtn = async function (event, postId) {
   const clickedElement = event.currentTarget;
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isLiked = post.obj.isLiked;
 
@@ -132,7 +132,7 @@ window.ClickLikesBtn = async function (postId) {
   ShowLoadingSection();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isActive = post.obj.isActive;
 

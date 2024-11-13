@@ -113,6 +113,35 @@ export class Post {
     }
   }
 
+  static async getPostInfo(postId) {
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Posts/getPostInfo?id=${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to get post.";
+    } finally {
+      return response;
+    }
+  }
+
   static async EditPost(postRequest) {
     // text = encodeURIComponent(text);
 
@@ -271,6 +300,17 @@ export class Post {
 
   async init(postId) {
     let response = await Post.getPost(postId);
+
+    if (!response.valid) {
+      ShowAlert("Error", "Failed to load post.", "danger");
+      return;
+    }
+
+    this.obj = response.obj;
+  }
+
+  async initInfo(postId) {
+    let response = await Post.getPostInfo(postId);
 
     if (!response.valid) {
       ShowAlert("Error", "Failed to load post.", "danger");
@@ -533,7 +573,7 @@ window.CreatePost = function (post) {
 `;
 
   let shareBtn =
-    isActive && !post.isSharedPostDeleted
+    isActive && type != "OriginalDeleted"
       ? `
     <span class="share"
           onclick="ClickShareBtn(${post.id},${post.originalPostId})"
@@ -1170,7 +1210,7 @@ window.ClickOptionsPostBtn = async function (event, postId) {
   // await delay(199);
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (!post.obj.isActive) {
     menu.classList.add("d-none");
@@ -1205,7 +1245,7 @@ window.ClickSavePost = async function (event, postId) {
   let text = element.textContent;
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let isActive = post.obj.isActive;
 
@@ -1238,7 +1278,7 @@ window.ToggleSavedPost = async function (postId) {
   ShowLoadingSection();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let closeBtn = document.querySelector(".confirm-message .btn-close");
 
@@ -1277,7 +1317,7 @@ window.ClickEditPost = async function (postId) {
   ShowLoadingSection();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (!post.obj.isActive) {
     await Reload();
@@ -1302,7 +1342,7 @@ async function EditPost(postId) {
   let closeBtn = document.querySelector(".manage-post .btn-close");
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (!post.obj.isActive) {
     closeBtn.click();
@@ -1349,7 +1389,7 @@ window.ClickMoveToTrash = async function (postId) {
   ShowLoadingSection();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (!post.obj.isActive) {
     await Reload();
@@ -1376,7 +1416,7 @@ window.ClickRestorePost = async function (postId) {
   ShowLoadingSection();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (post.obj.isActive) {
     await Reload();
@@ -1401,7 +1441,7 @@ async function ToggleActivePost(postId) {
   ShowLoadingSection();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let closeBtn = document.querySelector(".confirm-message .btn-close");
 
@@ -1438,7 +1478,7 @@ window.ClickShareBtn = async function (postId, originalPostId) {
   ShowLoadingSection();
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (!post.obj.isActive) {
     await Reload();
@@ -1532,7 +1572,7 @@ window.SharePost = async function (postId) {
   let closeBtn = document.querySelector(".share button.close");
 
   let post = new Post();
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (!post.obj.isActive) {
     closeBtn.click();
@@ -1575,7 +1615,7 @@ window.ClickDeletePost = async function (postId) {
 
   var post = new Post();
 
-  await post.init(postId);
+  await post.initInfo(postId);
 
   if (post.obj.isActive) {
     await Reload();
@@ -1599,7 +1639,7 @@ async function DeletePost(postId) {
 
   var post = new Post();
 
-  await post.init(postId);
+  await post.initInfo(postId);
 
   let closeBtn = document.querySelector(".confirm-message .btn-close");
 
