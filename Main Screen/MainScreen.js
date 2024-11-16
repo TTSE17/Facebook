@@ -57,7 +57,7 @@ async function LoadPosts() {
 }
 
 function LoadCurrentUserInfo() {
-  profileImage.src = window.GetImage(currentUser.obj.imagePath);
+  profileImage.src = window.GetImage(currentUser.imagePath);
   homeImage.src = profileImage.src;
 }
 
@@ -86,13 +86,13 @@ changePasswordItem.addEventListener("click", () => {
 });
 
 profileBtn.addEventListener("click", async () => {
-  window.LoadUserInfo(currentUser.obj.id);
+  window.LoadUserInfo(currentUser.id);
 });
 
-createPostBtn.addEventListener("click", () => {
+createPostBtn.addEventListener("click", async () => {
   ShowLoadingSection();
 
-  window.ManagePostSection();
+  await window.ManagePostSection();
 
   let toggleModelBtn = document.querySelector(".manage-post button");
 

@@ -2,6 +2,8 @@ import { Response, ShowAlert } from "../Js/helper.js";
 
 export class Password {
   static async ChangePassword(currentPassword, newPassword) {
+    await window.VerifyToken();
+
     let response = new Response();
 
     let request = {

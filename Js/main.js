@@ -1,27 +1,14 @@
 import {} from "../Js/clsToken.js";
-import { GetUserInfoFromStorrage, User } from "../Js/clsUser.js";
+import { GetUserInfoFromStorrage } from "../Js/clsUser.js";
 import { ShowAlert } from "../Js/helper.js";
 
 window.defaultImage = "../imgs/d1.png";
-
-window.UnAuthenication = function () {
-  window.location.href = "../Login_Signup/login_signup.html";
-
-  alert("You need to log in");
-
-  throw new Error("UN"); // Throw an error to stop further execution
-};
-
-window.currentUser = null;
 
 window.ShowLoadingSection();
 
 var userInfo = GetUserInfoFromStorrage();
 
-var user = new User(userInfo.id);
-user.obj = userInfo;
-
-window.currentUser = user;
+window.currentUser = userInfo;
 
 // window.RemoveLoadingSection();
 

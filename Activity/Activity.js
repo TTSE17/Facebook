@@ -1,6 +1,7 @@
 import {} from "../Js/main.js";
 import { Post } from "../Js/clsPost.js";
 import { ShowAlert, ShowConfirmMessage } from "../Js/helper.js";
+import { User } from "../Js/clsUser.js";
 
 let trashBtn = document.querySelector("div .left-section ul a[href='#trash']");
 let activityLogBtn = document.querySelector(
@@ -84,7 +85,7 @@ async function LoadTrash() {
 async function LoadActivity() {
   if (currentUser == null) return;
 
-  let response = await currentUser.AllActivity();
+  let response = await User.AllActivity();
 
   if (response.valid) {
     RenderActivity(response.obj);
@@ -172,7 +173,7 @@ window.LoadPost = async function (postId) {
 async function LoadSavedPosts() {
   if (currentUser == null) return;
 
-  let response = await currentUser.AllSavedPosts();
+  let response = await User.AllSavedPosts();
 
   if (response.valid) {
     RenderSavedPosts(response.obj);

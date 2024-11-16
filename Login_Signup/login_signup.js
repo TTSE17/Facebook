@@ -1,8 +1,8 @@
-import { saveToken, removeToken } from "../Js/clsToken.js";
+import { saveToken, saveRefreshToken } from "../Js/clsToken.js";
 import { User, SaveUserInfoInStorrage } from "../Js/clsUser.js";
 import { ShowAlert } from "../Js/helper.js";
 
-removeToken();
+localStorage.clear();
 
 let contain = document.querySelector(".contain");
 
@@ -93,11 +93,7 @@ loginForm.addEventListener("submit", async (e) => {
   let response = await User.Login(loginRequest);
 
   if (response.valid) {
-    let token = response.obj.token;
-
-    saveToken(token);
-
-    SaveUserInfoInStorrage(response.obj.user);
+    SaveData(response.obj);
 
     window.location.href = "../Main Screen/MainScreen.html";
   } else {
@@ -105,3 +101,22 @@ loginForm.addEventListener("submit", async (e) => {
   }
   RemoveLoadingSection();
 });
+
+function SaveData(data) {
+  let token = data.token;
+
+  saveToken(token);
+
+  let refreshToken = data.refreshToken;
+
+  saveRefreshToken(refreshToken);
+
+  var userInfo = {
+    id: data["id"],
+    name: data["name"],
+    email: data["email"],
+    imagePath: data["imagePath"],
+  };
+
+  SaveUserInfoInStorrage(userInfo);
+}

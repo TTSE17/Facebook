@@ -2,6 +2,8 @@ import { Response, ShowAlert } from "../Js/helper.js";
 
 export class User {
   static async IsNameFound(name) {
+    await window.VerifyToken();
+
     let response = new Response();
 
     try {
@@ -82,67 +84,9 @@ export class User {
     }
   }
 
-  constructor(userId) {
-    this.id = Number(userId);
-    this.obj = null;
-  }
+  static async SaveUserInfo(userRequest) {
+    await window.VerifyToken();
 
-  async Profile() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(`https://victus.runasp.net/api/Users/Profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to retrieve profile";
-    } finally {
-      return response;
-    }
-  }
-
-  async GetUser() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Users/GetUser?id=${this.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to retrieve user";
-    } finally {
-      return response;
-    }
-  }
-
-  async SaveUserInfo(userRequest) {
     let response = new Response();
 
     try {
@@ -171,7 +115,9 @@ export class User {
     }
   }
 
-  async AllActivity() {
+  static async AllActivity() {
+    await window.VerifyToken();
+
     let response = new Response();
 
     try {
@@ -200,7 +146,9 @@ export class User {
     }
   }
 
-  async AllSavedPosts() {
+  static async AllSavedPosts() {
+    await window.VerifyToken();
+
     let response = new Response();
 
     try {
@@ -228,6 +176,72 @@ export class User {
       return response;
     }
   }
+
+  static async Profile() {
+    await window.VerifyToken();
+
+    let response = new Response();
+
+    try {
+      let data = await fetch(`https://victus.runasp.net/api/Users/Profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to retrieve profile";
+    } finally {
+      return response;
+    }
+  }
+
+  constructor(userId) {
+    this.id = Number(userId);
+    this.obj = null;
+  }
+
+  async GetUser() {
+    await window.VerifyToken();
+
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        `https://victus.runasp.net/api/Users/GetUser?id=${this.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        response.error = "Unauthorized";
+
+        UnAuthenication();
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Failed to retrieve user";
+    } finally {
+      return response;
+    }
+  }
 }
 
 export function SaveUserInfoInStorrage(user) {
@@ -239,9 +253,7 @@ export function GetUserInfoFromStorrage() {
 }
 
 async function UpdateCurrentUser() {
-  let user = new User();
-
-  let response = await user.Profile();
+  let response = await User.Profile();
 
   if (!response.valid) {
     // UnAuthenication();
@@ -251,10 +263,9 @@ async function UpdateCurrentUser() {
     return;
   }
 
-  user.obj = response.obj;
-  user.id = response.obj.id;
+  window.currentUser = response.obj;
 
-  window.currentUser = user;
+  SaveUserInfoInStorrage(currentUser);
 }
 
 let userRequest = null,
@@ -265,8 +276,8 @@ let userRequest = null,
 
 window.ClickEditProfileItem = function () {
   userRequest = {
-    name: currentUser.obj.name,
-    imagePath: currentUser.obj.imagePath,
+    name: currentUser.name,
+    imagePath: currentUser.imagePath,
   };
 
   document.querySelector(".pop-section").innerHTML = `
@@ -326,7 +337,7 @@ window.ClickEditProfileItem = function () {
                 class="form-control"
                 required
                 maxlength="17"
-                value="${currentUser.obj.name}"
+                value="${currentUser.name}"
               />
             </div>
 
@@ -335,7 +346,7 @@ window.ClickEditProfileItem = function () {
                 type="email"
                 class="form-control"
                 id="floatingInput"
-                value="${currentUser.obj.email}"
+                value="${currentUser.email}"
                 disabled
               />
               <label for="floatingInput" class="form-label"
@@ -393,7 +404,7 @@ window.ClickEditProfileItem = function () {
 let current, prev, change;
 
 function LoadImage() {
-  let image = window.GetImage(currentUser.obj.imagePath);
+  let image = window.GetImage(currentUser.imagePath);
 
   imageElement.src = image;
 
@@ -497,7 +508,7 @@ async function CheckUserName() {
     return false;
   }
 
-  if (userNameValue != currentUser.obj.name) {
+  if (userNameValue != currentUser.name) {
     let response = await User.IsNameFound(userNameValue);
 
     if (!response.valid) {
@@ -531,7 +542,7 @@ window.SaveEditProfile = async function () {
     return;
   }
 
-  let response = await window.currentUser.SaveUserInfo(userRequest);
+  let response = await User.SaveUserInfo(userRequest);
 
   if (!response.valid) {
     ShowAlert("Error", response.error, "danger");

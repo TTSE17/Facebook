@@ -66,14 +66,14 @@ async function GetUser() {
   if (!response.valid) {
     // ShowAlert("Error", response.error,'danger');
 
-    Invalid();
+    if (response.error != "Unauthorized") Invalid();
 
     return;
   }
 
   CreateGuestUserProfile();
 
-  user.obj = response.obj;
+  user = response.obj;
 }
 
 function CreateCurrentUserProfile() {
@@ -211,6 +211,6 @@ async function LoadUserPosts() {
 }
 
 function LoadUserInfo() {
-  profileImage.src = GetImage(user.obj.imagePath);
-  userName.innerHTML = user.obj.name;
+  profileImage.src = GetImage(user.imagePath);
+  userName.innerHTML = user.name;
 }

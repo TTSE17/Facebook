@@ -182,7 +182,7 @@ function CreateCommentsSection(totalComments, enableCreateComment = true) {
       
     <div class="image rounded-circle overflow-hidden">
       <img src="${GetImage(
-        currentUser.obj.imagePath
+        currentUser.imagePath
       )}" decoding="async" alt="${defaultImage}"/>
     </div>
 
@@ -447,12 +447,12 @@ function EditcommentSection(commentId) {
                   <img
                     class="rounded-circle border border-primary"
                     src="${GetImage(
-                      currentUser.obj.imagePath
+                      currentUser.imagePath
                     )}" decoding="async" alt="${defaultImage}"
                   />
                 </div>
 
-                <h5 class="mb-0">${currentUser.obj.name}</h5>
+                <h5 class="mb-0">${currentUser.name}</h5>
 
               </div>
 

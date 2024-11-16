@@ -14,6 +14,8 @@ export class Post {
   static posts = [];
 
   static async FetchPosts(filterRequest) {
+    await window.VerifyToken();
+
     let response = new Response();
 
     try {
@@ -310,6 +312,8 @@ export class Post {
   }
 
   async initInfo(postId) {
+    await window.VerifyToken();
+
     let response = await Post.getPostInfo(postId);
 
     if (!response.valid) {
@@ -320,7 +324,7 @@ export class Post {
     this.obj = response.obj;
   }
 
-  async RefreshPostInfo() {
+  RefreshPostInfo() {
     let post = this.obj;
 
     let postId = post.id;
@@ -373,7 +377,7 @@ window.CreateShowPostMediaSection = async function (postId) {
     mediaList = post.obj.originalPost.media;
   }
 
-  await post.RefreshPostInfo();
+  post.RefreshPostInfo();
 
   // if (mediaList == null || mediaList.length == 0) {
   //   RemoveLoadingSection();
@@ -783,6 +787,8 @@ window.ManagePostSection = async function (postId = null) {
     if (post.obj.postType != "Normal") {
       uploadMediaSection = "";
     }
+  } else {
+    await window.VerifyToken();
   }
 
   document.querySelector(".pop-section").innerHTML = `
@@ -829,12 +835,12 @@ window.ManagePostSection = async function (postId = null) {
                   <img
                     class="rounded-circle border border-primary"
                     src="${GetImage(
-                      currentUser.obj.imagePath
+                      currentUser.imagePath
                     )}" decoding="async" alt="${defaultImage}"
                   />
                 </div>
 
-                <h5 class="mb-0">${currentUser.obj.name}</h5>
+                <h5 class="mb-0">${currentUser.name}</h5>
 
               </div>
 
@@ -1156,6 +1162,8 @@ async function uploadMedia() {
 }
 
 async function AddPost() {
+  await window.VerifyToken();
+
   ShowLoadingSection();
 
   let postInput = document.querySelector(".manage-post textarea");
@@ -1523,11 +1531,11 @@ function CreateShareSection(postId) {
               <img
                 class="rounded-circle border border-primary"
                 src="${GetImage(
-                  currentUser.obj.imagePath
+                  currentUser.imagePath
                 )}" decoding="async" alt="${defaultImage}"
               />
             </div>
-            ${currentUser.obj.name}
+            ${currentUser.name}
           </div>
 
           <div class="modal-body">
