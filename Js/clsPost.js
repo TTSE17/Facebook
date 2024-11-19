@@ -543,8 +543,8 @@ window.CreatePost = function (post) {
           <span class="short-text" style="white-space: pre-wrap;">${
             originalPost.text != null
               ? originalPost.text.length > 399
-                ? originalPost.text.substring(0, 399)
-                : originalPost.text
+                ? EscapeHTML(originalPost.text.substring(0, 399))
+                : EscapeHTML(originalPost.text)
               : ""
           }</span>
           <span class="more-text d-none" style="white-space: pre-wrap;">${
@@ -629,8 +629,8 @@ window.CreatePost = function (post) {
     <span class="short-text" style="white-space: pre-wrap;">${
       post.text != null
         ? post.text.length > 537
-          ? post.text.substring(0, 537)
-          : post.text
+          ? EscapeHTML(post.text.substring(0, 537))
+          : EscapeHTML(post.text)
         : ""
     }</span>
     <span class="more-text d-none" style="white-space: pre-wrap;">${

@@ -1,4 +1,4 @@
-import {} from "../Js/clsToken.js";
+import { getToken, getRefreshToken } from "../Js/clsToken.js";
 import { GetUserInfoFromStorrage } from "../Js/clsUser.js";
 import { ShowAlert } from "../Js/helper.js";
 
@@ -6,7 +6,18 @@ window.defaultImage = "../imgs/d1.png";
 
 window.ShowLoadingSection();
 
+window.token = getToken();
+window.refreshToken = getRefreshToken();
+
+if (token == null || refreshToken == null) {
+  UnAuthenication();
+}
+
 var userInfo = GetUserInfoFromStorrage();
+
+if (userInfo == null) {
+  UnAuthenication();
+}
 
 window.currentUser = userInfo;
 

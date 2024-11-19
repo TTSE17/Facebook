@@ -4,7 +4,7 @@ export function saveToken(token) {
   localStorage.setItem("authToken", token);
 }
 
-function getToken() {
+export function getToken() {
   return localStorage.getItem("authToken");
 }
 
@@ -12,17 +12,16 @@ export function saveRefreshToken(token) {
   localStorage.setItem("refreshToken", token);
 }
 
-function getRefreshToken() {
+export function getRefreshToken() {
   return localStorage.getItem("refreshToken");
 }
-
-window.token = getToken();
-window.refreshToken = getRefreshToken();
 
 window.UnAuthenication = function () {
   window.location.href = "../Login_Signup/login_signup.html";
 
   alert("You need to log in");
+
+  throw "Erorr";
 };
 
 window.VerifyToken = async function () {

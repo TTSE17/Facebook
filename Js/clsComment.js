@@ -285,7 +285,7 @@ window.CreateCommentNode = function (comment) {
         <h5 class="mb-1">${comment.userName}</h5>
 
         <p class="ps-1 mb-0" style="white-space: pre-wrap;word-break: break-word;">${
-          comment.text
+          EscapeHTML(comment.text)
         }</p>
       </div>
 

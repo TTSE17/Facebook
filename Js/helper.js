@@ -86,7 +86,7 @@ export function ShowAlert(header, message, type) {
           onclick="RemoveSection(event,'.alerts .alert-message')"
         ></button>
         <h2 class="alert-heading">${header}</h2>
-        <h5>${message}</h5>
+        <h5 style="white-space: break-spaces;">${message}</h5>
       </div>
 
     </div>
@@ -231,4 +231,10 @@ window.HandleDate3 = function (dateText) {
   const timePart = `${hours}:${minutes.toString().padStart(2, "0")} ${ampm}`;
 
   return `${datePart} ${timePart}`;
+};
+
+window.EscapeHTML = function (text) {
+  const span = document.createElement("span");
+  span.innerText = text;
+  return span.innerHTML;
 };
