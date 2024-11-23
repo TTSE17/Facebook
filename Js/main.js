@@ -3,6 +3,7 @@ import { GetUserInfoFromStorrage } from "../Js/clsUser.js";
 import { ShowAlert } from "../Js/helper.js";
 
 window.defaultImage = "../imgs/d1.png";
+window.postsContainer = document.querySelector(".posts .content");
 
 window.ShowLoadingSection();
 
@@ -40,6 +41,10 @@ window.ClickProfileOption = function (type) {
 window.Reload = async function () {
   ShowLoadingSection();
 
+  pageNumber = 1;
+
+  if (postsContainer != null) postsContainer.innerHTML = "";
+
   ShowAlert("Warning", "Tye Again!", "warning");
 
   await window.RefreshPosts();
@@ -63,3 +68,28 @@ window.LoadUserInfo = async function (userId) {
 
 // When you navigate from one HTML page to another, All JavaScript variables,
 // including global variables like those on window, are reset.
+
+window.pageNumber = 1;
+
+window.LoadingPosts = () => {
+  let checkNextRequest = true;
+
+  window.addEventListener("scroll", async () => {
+    if (!checkNextRequest) return;
+
+    if (
+      window.innerHeight + window.scrollY >=
+      document.body.offsetHeight - 597
+    ) {
+      checkNextRequest = false;
+
+      pageNumber++;
+
+      console.log(pageNumber);
+
+      await RefreshPosts();
+
+      checkNextRequest = true;
+    }
+  });
+};

@@ -10,8 +10,6 @@ let userName = document.querySelector(".user-info h3");
 
 let profileOptions = document.querySelector(".profile-options");
 
-var postsContainer = document.querySelector(".posts .content");
-
 const userId = getQueryParam("userId") ?? 0;
 
 function Invalid() {
@@ -41,6 +39,8 @@ window.RefreshPosts = async function () {
 };
 
 await LoadPage();
+
+window.LoadingPosts();
 
 async function LoadPage() {
   ShowLoadingSection();
@@ -196,14 +196,14 @@ function CreateGuestUserProfile() {
 }
 
 async function LoadUserPosts() {
-  let filterRequest = { UserId: userId };
+  let filterRequest = { UserId: userId, pageNumber };
 
   let response = await Post.FetchPosts(filterRequest);
 
   if (response.valid) {
     Post.posts = response.obj;
 
-    Post.RenderPosts(postsContainer);
+    Post.RenderPosts();
   } else {
     ShowAlert("Error", response.error, "danger");
     // Invalid();

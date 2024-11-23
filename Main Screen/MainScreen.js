@@ -16,8 +16,6 @@ var createPostBtn = document.querySelector(".home-header button");
 var recentBtn = document.querySelector(".posts .post-header li:first-child a");
 var popularBtn = document.querySelector(".posts .post-header li:last-child a");
 
-var postsContainer = document.querySelector(".posts .content");
-
 let recentBtnActive = recentBtn.classList.contains("active");
 
 window.RefreshPage = async function () {
@@ -32,6 +30,8 @@ window.RefreshPosts = async function () {
 
 await LoadPage();
 
+window.LoadingPosts();
+
 async function LoadPage() {
   // ShowLoadingSection();
 
@@ -43,6 +43,7 @@ async function LoadPage() {
 async function LoadPosts() {
   let filterReuest = {
     type: recentBtnActive ? null : "popular",
+    pageNumber,
   };
 
   let response = await Post.FetchPosts(filterReuest);
@@ -50,7 +51,7 @@ async function LoadPosts() {
   if (response.valid) {
     Post.posts = response.obj;
 
-    Post.RenderPosts(postsContainer);
+    Post.RenderPosts();
   } else {
     ShowAlert("Error", response.error, "danger");
   }
@@ -108,6 +109,10 @@ recentBtn.addEventListener("click", async () => {
 
   recentBtnActive = true;
 
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
+
   await LoadPosts();
 
   RemoveLoadingSection();
@@ -119,6 +124,10 @@ popularBtn.addEventListener("click", async () => {
   ShowLoadingSection();
 
   recentBtnActive = false;
+
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
 
   await LoadPosts();
 

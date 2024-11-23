@@ -91,10 +91,5 @@ function IsTokenValid() {
     return false;
   }
 
-  console.log(
-    new Date(data.exp * 1000),
-    new Date(data.exp * 1000) > new Date()
-  );
-
   return new Date(data.exp * 1000) > new Date();
 }

@@ -19,18 +19,15 @@ export class Post {
     let response = new Response();
 
     try {
-      let data = await fetch(
-        "https://victus.runasp.net/api/Posts/GetAllPosts",
-        {
-          method: "post",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(filterRequest),
-        }
-      );
+      let data = await fetch("https://victus.runasp.net/api/Posts/GetAllPosts", {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(filterRequest),
+      });
 
       if (data.ok) {
         response.obj = await data.json();
@@ -49,9 +46,7 @@ export class Post {
     }
   }
 
-  static RenderPosts(postsContainer) {
-    postsContainer.innerHTML = "";
-
+  static RenderPosts() {
     Post.posts.forEach((post) => {
       postsContainer.innerHTML += CreatePost(post);
     });
@@ -1199,6 +1194,10 @@ async function AddPost() {
 
   closeBtn.click();
 
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
+
   window.RefreshPosts(); // wait
 
   RemoveLoadingSection();
@@ -1386,6 +1385,10 @@ async function EditPost(postId) {
 
   closeBtn.click();
 
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
+
   window.RefreshPosts(); // wait
 
   RemoveLoadingSection();
@@ -1476,6 +1479,10 @@ async function ToggleActivePost(postId) {
 
     return;
   }
+
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
 
   await window.RefreshPosts();
 
@@ -1613,6 +1620,10 @@ window.SharePost = async function (postId) {
 
   closeBtn.click();
 
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
+
   window.RefreshPosts(); // wait
 
   RemoveLoadingSection();
@@ -1670,6 +1681,10 @@ async function DeletePost(postId) {
 
     return;
   }
+
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
 
   await window.RefreshPosts();
 

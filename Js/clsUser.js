@@ -558,6 +558,10 @@ window.SaveEditProfile = async function () {
 
   await UpdateCurrentUser();
 
+  pageNumber = 1;
+
+  if (postsContainer != null) postsContainer.innerHTML = "";
+
   RefreshPage(); // wait
 
   ShowAlert("Done", "changes saved", "success");

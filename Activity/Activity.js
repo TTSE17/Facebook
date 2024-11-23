@@ -11,7 +11,6 @@ let savedPostsBtn = document.querySelector(
   "div .left-section ul a[href='#saved']"
 );
 
-var postsContainer = document.querySelector(".posts .content");
 var activityContainer = document.querySelector(".right-section #activity");
 var savedContainer = document.querySelector(".right-section #saved");
 
@@ -41,12 +40,20 @@ window.RefreshPosts = function () {
 
 RefreshPosts();
 
+let checkScroll = true;
+
 async function ClickTrash() {
   ShowLoadingSection();
 
   await LoadTrash();
 
   RemoveLoadingSection();
+
+  if (!checkScroll) return;
+
+  checkScroll = false;
+
+  window.LoadingPosts();
 }
 
 async function ClickActivityLog() {
@@ -68,14 +75,14 @@ async function ClickSavedPosts() {
 async function LoadTrash() {
   if (currentUser == null) return;
 
-  let filterRequest = { UserId: currentUser.id, IsActive: false };
+  let filterRequest = { UserId: currentUser.id, IsActive: false, pageNumber };
 
   let response = await Post.FetchPosts(filterRequest);
 
   if (response.valid) {
     Post.posts = response.obj;
 
-    Post.RenderPosts(postsContainer);
+    Post.RenderPosts();
   } else {
     ShowAlert("Error", response.error, "danger");
     //   Invalid();
@@ -137,7 +144,7 @@ function CreateActivity(item) {
           You ${typeText} ${withPost}
         </h6>
 
-        <p class="text-muted small mb-0">${text}</p>
+        <p class="text-muted small mb-0">${EscapeHTML(text)}</p>
 
       </div>
 
