@@ -1,13 +1,13 @@
 import { Post } from "../Js/clsPost.js";
-import { Response, ShowAlert } from "../Js/helper.js";
+import { HandleTotal, Response, ShowAlert } from "../Js/helper.js";
 
-class Like {
-  static async RemoveLike(postId) {
+class LikeComment {
+  static async RemoveLikeComment(commentId) {
     let response = new Response();
 
     try {
       let data = await fetch(
-        `https://victus.runasp.net/api/Like/RemoveLike/${postId}`,
+        `https://victus.runasp.net/api/LikeComment/RemoveLikeComment/${commentId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -23,17 +23,17 @@ class Like {
         response.error = (await data.json()).error;
       }
     } catch (error) {
-      response.error = "Failed to remove like";
+      response.error = "Failed to remove like comment";
     } finally {
       return response;
     }
   }
 
-  static async AddLike(postId) {
+  static async AddLikeComment(commentId) {
     let response = new Response();
     try {
       let data = await fetch(
-        `https://victus.runasp.net/api/Like/AddLike/${postId}`,
+        `https://victus.runasp.net/api/LikeComment/AddLikeComment/${commentId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -49,18 +49,18 @@ class Like {
         response.error = (await data.json()).error;
       }
     } catch (error) {
-      response.error = "Failed to add like";
+      response.error = "Failed to add like comment";
     } finally {
       return response;
     }
   }
 
-  static async GetLikers(postId) {
+  static async GetLikersComment(commentId) {
     let response = new Response();
 
     try {
       let data = await fetch(
-        `https://victus.runasp.net/api/Like/GetLikersOnPost/${postId}`,
+        `https://victus.runasp.net/api/LikeComment/GetLikersOnComment/${commentId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ class Like {
         response.error = (await data.json()).error;
       }
     } catch (error) {
-      response.error = "Failed Get Likers";
+      response.error = "Failed Get Likers On Comment";
     } finally {
       return response;
     }
@@ -87,7 +87,7 @@ class Like {
 
 let isClickLike = false;
 
-window.ClickLikeBtn = async function (event, postId) {
+window.ClickLikeCommentBtn = async function (event, commentId, postId) {
   if (isClickLike) {
     return;
   }
@@ -96,14 +96,16 @@ window.ClickLikeBtn = async function (event, postId) {
 
   const clickedElement = event.currentTarget;
 
+  let isLikedClass = clickedElement.classList.contains("liked");
+
   let post = new Post();
   await post.initInfo(postId);
 
-  let isLiked = post.obj.isLiked;
+  if (!post.obj.isActive) {
+    let closeBtn = document.querySelector(".comments button.btn-close");
 
-  let isLikedClass = clickedElement.classList.contains("liked");
+    closeBtn.click();
 
-  if (!post.obj.isActive || isLiked != isLikedClass) {
     await Reload();
 
     isClickLike = false;
@@ -111,42 +113,62 @@ window.ClickLikeBtn = async function (event, postId) {
     return;
   }
 
-  let response = isLiked
-    ? await Like.RemoveLike(postId)
-    : await Like.AddLike(postId);
+  let response = isLikedClass
+    ? await LikeComment.RemoveLikeComment(commentId)
+    : await LikeComment.AddLikeComment(commentId);
 
   isClickLike = false;
 
   if (response.valid) {
-    clickedElement.classList.toggle("liked");
+    let info2Section = document.querySelector(
+      `.comments .comment[id='${commentId}'] .info2`
+    );
 
-    post.obj.countLikes += isLiked ? -1 : 1;
+    document
+      .querySelector(`.comments .comment[id='${commentId}'] .like-comment`)
+      .classList.toggle("liked");
 
-    post.RefreshPostInfo();
+    const totalLikesCommentElement = document.querySelector(
+      `.comments .comment[id='${commentId}'] .likes-comment`
+    );
+
+    if (totalLikesCommentElement == null) {
+      info2Section.innerHTML += `
+      <div class="right" onclick="ClickLikesCommentBtn(${commentId})" role="button">
+        <small class="likes-comment">1</small>
+    
+        <small class="text-primary">
+          <i class="fa-regular fa-thumbs-up"></i>
+        </small>
+      </div>`;
+
+      return;
+    }
+
+    let countLikes = +totalLikesCommentElement.innerHTML;
+
+    countLikes += isLikedClass ? -1 : 1;
+
+    if (countLikes == 0) {
+      let rightSection = document.querySelector(
+        `.comments .comment[id='${commentId}'] .info2 .right`
+      );
+
+      rightSection.remove();
+
+      return;
+    }
+
+    totalLikesCommentElement.innerHTML = HandleTotal(countLikes);
   } else {
     ShowAlert("Error", response.error, "danger");
   }
 };
 
-window.ClickLikesBtn = async function (postId) {
+window.ClickLikesCommentBtn = async function (commentId) {
   ShowLoadingSection();
 
-  let post = new Post();
-  await post.initInfo(postId);
-
-  let isActive = post.obj.isActive;
-
-  let isTrashSection = document.getElementById("trash") ? true : false;
-
-  if (isActive == isTrashSection) {
-    await Reload();
-
-    return;
-  }
-
-  let response = await Like.GetLikers(postId);
-
-  post.RefreshPostInfo();
+  let response = await LikeComment.GetLikersComment(commentId);
 
   if (!response.valid) {
     ShowAlert("Error", "Failed to display likers", "danger");
@@ -168,7 +190,7 @@ window.ClickLikesBtn = async function (postId) {
 };
 
 function CreateLikersSection(totalLikes) {
-  document.querySelector(".pop-section").innerHTML = `
+  document.querySelector(".pop-section").innerHTML += `
   <div class="likers position-fixed top-0 w-100 h-100">
   
     <div class="overlay position-absolute w-100 h-100"></div>

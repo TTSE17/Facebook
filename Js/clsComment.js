@@ -1,5 +1,13 @@
 import { Post } from "../Js/clsPost.js";
-import { Response, ShowConfirmMessage, ShowAlert } from "../Js/helper.js";
+import {
+  HandleTotal,
+  ToggleClassLiked,
+  Response,
+  ShowConfirmMessage,
+  ShowAlert,
+} from "../Js/helper.js";
+
+import {} from "../Js/clsLikeComment.js";
 
 class Comment {
   static comments = [];
@@ -9,7 +17,7 @@ class Comment {
 
     try {
       let data = await fetch(
-        `https://victus.runasp.net/api/Posts/GetCommentsOnPost/${postId}`,
+        `https://victus.runasp.net/api/Comment/GetCommentsOnPost/${postId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -240,8 +248,12 @@ function CreateCommentsSection(totalComments, enableCreateComment = true) {
 window.CreateCommentNode = function (comment) {
   let content = document.querySelector(".comments .content");
 
+  let postId = post.obj.id;
+
+  let isPostActive = post.obj.isActive;
+
   let addOptionsComment =
-    currentUser.id == comment.userId && post.obj.isActive
+    currentUser.id == comment.userId && isPostActive
       ? `
     <div class="dropdown mb-4 align-self-center">
 
@@ -269,8 +281,33 @@ window.CreateCommentNode = function (comment) {
     </div>`
       : "";
 
+  let likeCommentBtn = isPostActive
+    ? `<small class="like-comment ${ToggleClassLiked(comment.isLiked)} mx-2"
+        onclick="window.ClickLikeCommentBtn(event,${
+          comment.id
+        },${postId})" role="button">
+          Like
+      </small>`
+    : "";
+
+  let LikesCommentSection = comment.countLikesComment
+    ? `
+  <div class="right" onclick="ClickLikesCommentBtn(${
+    comment.id
+  })" role="button">
+    <small class="likes-comment">
+    ${HandleTotal(comment.countLikesComment)}
+    </small>
+
+    <small class="text-primary">
+      <i class="fa-regular fa-thumbs-up"></i>
+    </small>
+  </div>
+  `
+    : "";
+
   content.innerHTML += `
-  <div class="comment d-flex gap-sm-3 gap-2 p-3 pe-4">
+  <div class="comment d-flex gap-sm-3 gap-2 p-3 pe-4" id=${comment.id}>
 
     <div class="image">
       <img src="${GetImage(comment.imagePath)}" alt="${defaultImage}"
@@ -284,15 +321,28 @@ window.CreateCommentNode = function (comment) {
       <div class="info rounded-3 py-2 ps-2 pe-3 mb-1">
         <h5 class="mb-1">${comment.userName}</h5>
 
-        <p class="ps-1 mb-0" style="white-space: pre-wrap;word-break: break-word;">${
-          EscapeHTML(comment.text)
-        }</p>
+        <p class="ps-1 mb-0" style="white-space: pre-wrap;word-break: break-word;">${EscapeHTML(
+          comment.text
+        )}</p>
       </div>
 
-      <small class="text-muted ps-1"
-      onmouseover="this.innerText = HandleDate3('${comment.createdAt}');" 
-      onmouseout="this.innerText = HandleDate2('${comment.createdAt}');"
-      >${HandleDate2(comment.createdAt)}</small>
+      <div class="info2 d-flex justify-content-between gap-3 px-1">
+        
+        <div class="left text-muted">
+          <small
+            onmouseover="this.innerText = HandleDate3('${comment.createdAt}');"
+            onmouseout="this.innerText = HandleDate2('${comment.createdAt}');"
+            >${HandleDate2(comment.createdAt)}</small
+          >
+
+          ${likeCommentBtn}
+
+          <small role="button">Reply</small>
+        </div>
+
+        ${LikesCommentSection}
+
+      </div>
 
     </div>
 
@@ -330,7 +380,7 @@ window.PostComment = async function () {
   let isActive = post.obj.isActive;
 
   if (!isActive) {
-    let closeBtn = document.querySelector(".comments h3.close-btn");
+    let closeBtn = document.querySelector(".comments button.btn-close");
 
     closeBtn.click();
 
@@ -378,7 +428,7 @@ window.ClickEditComment = async function (commentId) {
   let isActive = post.obj.isActive;
 
   if (!isActive) {
-    let closeBtn = document.querySelector(".comments h3.close-btn");
+    let closeBtn = document.querySelector(".comments button.btn-close");
 
     closeBtn.click();
 
@@ -496,7 +546,7 @@ window.EditComment = async function (commentId) {
   if (!isActive) {
     closeEditCommentBtn.click();
 
-    let closeBtn = document.querySelector(".comments h3.close-btn");
+    let closeBtn = document.querySelector(".comments button.btn-close");
 
     closeBtn.click();
 
@@ -538,7 +588,7 @@ window.ClickDeleteComment = async function (commentId) {
   let isActive = post.obj.isActive;
 
   if (!isActive) {
-    let closeBtn = document.querySelector(".comments h3.close-btn");
+    let closeBtn = document.querySelector(".comments button.btn-close");
 
     closeBtn.click();
 
@@ -572,7 +622,7 @@ async function DeleteComment(commentId) {
   let isActive = post.obj.isActive;
 
   if (!isActive) {
-    let closeBtn = document.querySelector(".comments h3.close-btn");
+    let closeBtn = document.querySelector(".comments button.btn-close");
 
     closeBtn.click();
 

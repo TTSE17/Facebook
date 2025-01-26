@@ -85,8 +85,6 @@ window.LoadingPosts = () => {
 
       pageNumber++;
 
-      console.log(pageNumber);
-
       await RefreshPosts();
 
       checkNextRequest = true;

@@ -343,6 +343,12 @@ body.hide-scrollbar {
   background-color: #b5bbc52e;
 }
 
+.comments .comment div .info2 .left .liked,
+.comments .comment div .info2 .left .like-comment:hover {
+  color: var(--blue-color);
+  transition: color 0.1s;
+}
+
 .comments .create-comment {
   background-color: #b5bbc52e !important;
 }
