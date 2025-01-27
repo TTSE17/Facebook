@@ -205,6 +205,29 @@ export class User {
     }
   }
 
+  static async Logout() {
+    let response = new Response();
+
+    try {
+      let data = await fetch("https://victus.runasp.net/api/Users/Logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.ok) {
+        response.valid = true;
+      } else {
+        response.error = (await data.json()).error;
+      }
+    } catch (error) {
+      response.error = "Logout failed";
+    } finally {
+      return response;
+    }
+  }
+
   constructor(userId) {
     this.id = Number(userId);
     this.obj = null;

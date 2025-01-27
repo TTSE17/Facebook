@@ -1,5 +1,5 @@
 import { getToken, getRefreshToken } from "../Js/clsToken.js";
-import { GetUserInfoFromStorrage } from "../Js/clsUser.js";
+import { User, GetUserInfoFromStorrage } from "../Js/clsUser.js";
 import { ShowAlert } from "../Js/helper.js";
 
 window.defaultImage = "../imgs/d1.png";
@@ -36,6 +36,20 @@ window.ClickProfileOption = function (type) {
   SetActivityType(type);
 
   window.location.href = `../Activity/Activity.html`;
+};
+
+window.ClickLogout = async function () {
+  ShowLoadingSection();
+
+  let response = await User.Logout();
+
+  if (response.valid) {
+    window.location.href = "../Login_Signup/login_signup.html";
+  } else {
+    ShowAlert("Error", response.error, "danger");
+  }
+  
+  RemoveLoadingSection();
 };
 
 window.Reload = async function () {
