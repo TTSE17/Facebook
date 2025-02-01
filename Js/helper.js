@@ -238,3 +238,28 @@ window.EscapeHTML = function (text) {
   span.innerText = text;
   return span.innerHTML;
 };
+
+function preventClick(event) {
+  event.stopPropagation();
+  event.preventDefault();
+}
+
+var loadPage = false;
+window.loadContent = true;
+
+window.RemovePreventClickEvent = function (element) {
+  element.removeEventListener("click", preventClick, true);
+};
+
+window.AddPreventClickEvent = function (element) {
+  element.addEventListener("click", preventClick, true);
+};
+
+window.AddPreventClickEvent(document);
+
+window.addEventListener("load", async () => {
+  // await delay(1111);
+  loadPage = true;
+  console.log("Loaded");
+  RemovePreventClickEvent(document);
+});

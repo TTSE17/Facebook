@@ -10,6 +10,8 @@ let changePasswordItem = document.querySelector(".navbar .change-password");
 let profileBtn = document.querySelector(".navbar .image");
 let profileImage = document.querySelector(".navbar .image img");
 
+let homeSection = document.querySelector(".home");
+
 let homeImage = document.querySelector(".home-header img");
 var createPostBtn = document.querySelector(".home-header button");
 
@@ -18,10 +20,16 @@ var popularBtn = document.querySelector(".posts .post-header li:last-child a");
 
 let recentBtnActive = recentBtn.classList.contains("active");
 
+window.AddPreventClickEvent(homeSection);
+
 window.RefreshPage = async function () {
   LoadCurrentUserInfo();
 
   await RefreshPosts();
+
+  console.log("End");
+
+  RemovePreventClickEvent(homeSection);
 };
 
 window.RefreshPosts = async function () {
