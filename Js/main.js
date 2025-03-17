@@ -22,7 +22,7 @@ if (userInfo == null) {
 
 window.currentUser = userInfo;
 
-// window.RemoveLoadingSection();
+window.RemoveLoadingSection();
 
 window.SetActivityType = function (type) {
   localStorage.setItem("activityType", type);
@@ -48,7 +48,7 @@ window.ClickLogout = async function () {
   } else {
     ShowAlert("Error", response.error, "danger");
   }
-  
+
   RemoveLoadingSection();
 };
 

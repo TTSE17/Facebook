@@ -1,6 +1,42 @@
 import { Response, ShowAlert } from "../Js/helper.js";
 
 export class User {
+  static async FetchUsers(filterRequest) {
+    await window.VerifyToken();
+
+    let response = new Response();
+
+    try {
+      let data = await fetch(
+        "https://victus.runasp.net/api/Users/GetAllUsers",
+        {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(filterRequest),
+        }
+      );
+
+      if (data.ok) {
+        response.obj = await data.json();
+
+        response.valid = true;
+      } else if (data.status == 401) {
+        UnAuthenication();
+      } else {
+        // response.error = (await data.json()).error;
+        response.error = "Failed to load users.";
+      }
+    } catch (error) {
+      response.error = "Failed to load users.";
+    } finally {
+      return response;
+    }
+  }
+
   static async IsNameFound(name) {
     await window.VerifyToken();
 

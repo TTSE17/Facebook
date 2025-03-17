@@ -27,8 +27,6 @@ window.RefreshPage = async function () {
 
   await RefreshPosts();
 
-  console.log("End");
-
   RemovePreventClickEvent(homeSection);
 };
 

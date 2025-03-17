@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search</title>
+
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/BS/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/master.css" />
+    <link rel="stylesheet" href="Search.css" />
+  </head>
+
+  <body>
+    <div class="d-flex align-items-center bg-white p-2 mb-1">
+      <a class="text-primary" href="../Main Screen/MainScreen.html">
+        <img
+          src="../imgs/download.png"
+          alt=""
+          class="rounded-circle"
+          style="width: 47px"
+        />
+      </a>
+
+      <div class="flex-grow-1 d-flex justify-content-center">
+        <div class="search position-relative">
+          <input class="" type="text" placeholder="Search" />
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <div class="left-section bg-light position-sticky top-0">
+        <h5 class="pt-3 px-sm-3 ps-1 text-center">Search Results</h5>
+
+        <hr />
+
+        <ul class="nav nav-pills gap-2">
+          <li class="nav-item w-100">
+            <a
+              href="#all"
+              class="nav-link text-center text-sm-start active"
+              data-bs-toggle="pill"
+            >
+              <i class="fa-solid fa-trash"></i>
+              <span class="ms-1">All</span>
+            </a>
+          </li>
+
+          <li class="nav-item w-100 drop-menu">
+            <a
+              href="#posts"
+              class="nav-link text-center text-sm-start"
+              data-bs-toggle="pill"
+            >
+              <i class="fa-solid fa-bookmark"></i>
+              <span class="ms-1">Posts</span>
+            </a>
+
+            <ul class="ps-sm-3">
+              <li
+                class="d-flex flex-md-row flex-column align-items-md-center pe-1 pt-2 gap-md-3 gap-1"
+              >
+                <small>Date Posted</small>
+                <input class="date-posted" type="date" />
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item w-100">
+            <a
+              href="#users"
+              class="nav-link text-center text-sm-start"
+              data-bs-toggle="pill"
+            >
+              <i class="fa-solid fa-bookmark"></i>
+              <span class="ms-1">People</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="right-section">
+        <div class="tab-content">
+          <div id="all" class="tab-pane fade active show">
+            <div class="users mt-1 px-3">
+              <div class="content bg-white rounded-s4 overflow-hidden"></div>
+              <div class="see-all"></div>
+            </div>
+
+            <div class="posts">
+              <div class="content px-sm-3 px-2"></div>
+            </div>
+          </div>
+
+          <div id="posts" class="posts tab-pane fade px-sm-3 px-2">
+            <div class="content"></div>
+          </div>
+
+          <div id="users" class="users tab-pane fade px-sm-3 px-2">
+            <div class="content bg-white rounded-4 overflow-hidden"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pop-section"></div>
+
+    <div class="pop-section2"></div>
+
+    <div class="alerts"></div>
+
+    <div class="loading position-fixed top-0 w-100 h-100 d-none">
+      <div class="overlay position-absolute w-100 h-100"></div>
+      <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+        <div class="spinner-border text-primary fs-3 p-5" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="../Js/BS/bootstrap.bundle.min.js"></script>
+    <script src="../Js/BS/all.min.js"></script>
+    <script src="Search.js" type="module"></script>
+  </body>
+</html>

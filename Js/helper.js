@@ -260,6 +260,6 @@ window.AddPreventClickEvent(document);
 window.addEventListener("load", async () => {
   // await delay(1111);
   loadPage = true;
-  console.log("Loaded");
+
   RemovePreventClickEvent(document);
 });
