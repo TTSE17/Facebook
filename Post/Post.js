@@ -1,13 +1,8 @@
-import { Post } from "../Js/main.js";
-
+import {} from "../Js/main.js";
+import { Post } from "../Js/clsPost.js";
 import { ShowAlert } from "../Js/helper.js";
 
 var content = document.querySelector(".content");
-
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
 
 const postId = getQueryParam("postId") ?? 0;
 
@@ -27,7 +22,7 @@ window.RefreshPosts = async function () {
   LoadPostInfo();
 };
 
-await RefreshPosts();
+RefreshPosts();
 
 async function GetPost() {
   let response = await Post.getPost(postId);
@@ -59,5 +54,6 @@ function LoadPostInfo() {
 
     return;
   }
+
   content.innerHTML = CreatePost(post);
 }

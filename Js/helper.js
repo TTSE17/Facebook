@@ -1,281 +1,8 @@
-import { getToken } from "../Js/token.js";
-
-let token = getToken();
-
-class Response {
+export class Response {
   constructor() {
     this.valid = false;
     this.obj = null;
     this.error = null;
-  }
-}
-
-export class User {
-  static async IsNameFound(name) {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Users/IsNameFound?name=${name}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        // response.error = (await data.json()).error;
-        response.error = "Failed";
-      }
-    } catch (error) {
-      response.error = "Failed";
-    } finally {
-      return response;
-    }
-  }
-
-  static async Register(request) {
-    let response = new Response();
-
-    try {
-      let data = await fetch("https://victus.runasp.net/api/Users/register", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
-      });
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Register failed";
-    } finally {
-      return response;
-    }
-  }
-
-  static async Login(request) {
-    let response = new Response();
-
-    try {
-      let data = await fetch("https://victus.runasp.net/api/Users/Login", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
-      });
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Login failed";
-    } finally {
-      return response;
-    }
-  }
-
-  constructor(userId) {
-    this.id = Number(userId);
-    this.obj = null;
-  }
-
-  async Profile() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(`https://victus.runasp.net/api/Users/Profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        // UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to retrieve profile";
-    } finally {
-      return response;
-    }
-  }
-
-  async GetUser() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Users/GetUser?id=${this.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to retrieve user";
-    } finally {
-      return response;
-    }
-  }
-
-  async SaveUserInfo(userRequest) {
-    let response = new Response();
-
-    try {
-      let data = await fetch("https://victus.runasp.net/api/Users/update", {
-        method: "put",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userRequest),
-      });
-
-      if (data.ok) {
-        response.obj = await data.json();
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to save information";
-    } finally {
-      return response;
-    }
-  }
-
-  async ChangePassword(currentPassword, newPassword) {
-    let response = new Response();
-
-    let request = {
-      currentPassword: currentPassword,
-      newPassword: newPassword,
-    };
-
-    try {
-      let data = await fetch(
-        "https://victus.runasp.net/api/Users/ChangePassword",
-        {
-          method: "post",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(request),
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed to change password";
-    } finally {
-      return response;
-    }
-  }
-
-  async AllActivity() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/Activity/AllActivity`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed To retrieve activity";
-    } finally {
-      return response;
-    }
-  }
-
-  async AllSavedPosts() {
-    let response = new Response();
-
-    try {
-      let data = await fetch(
-        `https://victus.runasp.net/api/SavedPost/AllSavedPosts`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.ok) {
-        response.obj = await data.json();
-
-        response.valid = true;
-      } else if (data.status == 401) {
-        UnAuthenication();
-      } else {
-        response.error = (await data.json()).error;
-      }
-    } catch (error) {
-      response.error = "Failed To retrieve saved posts";
-    } finally {
-      return response;
-    }
   }
 }
 
@@ -359,7 +86,7 @@ export function ShowAlert(header, message, type) {
           onclick="RemoveSection(event,'.alerts .alert-message')"
         ></button>
         <h2 class="alert-heading">${header}</h2>
-        <h5>${message}</h5>
+        <h5 style="white-space: break-spaces;">${message}</h5>
       </div>
 
     </div>
@@ -386,6 +113,38 @@ export function generateGUID() {
     return v.toString(16);
   });
 }
+
+var LoadingSection = document.querySelector(".loading");
+
+window.ShowLoadingSection = function () {
+  LoadingSection.classList.remove("d-none");
+};
+
+window.RemoveLoadingSection = function () {
+  LoadingSection.classList.add("d-none");
+};
+
+window.RemoveSection = function (e, sectionName) {
+  document.body.classList.remove("hide-scrollbar");
+
+  // if (e != null) e.preventDefault();
+
+  let section = document.querySelector(`${sectionName}`);
+  if (section != null) {
+    section.remove();
+  } else {
+    ShowAlert("Error", "Not Found", "danger");
+  }
+};
+
+window.delay = function (ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+window.getQueryParam = function (param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+};
 
 window.HandleDate = function (dateText) {
   // dateText = "2024-07-21T09:17:17";
@@ -444,7 +203,7 @@ window.HandleDate2 = function (dateText) {
 
   let months = days / 30;
 
-  if (months < 12) return parseInt(months) + "m";
+  if (months < 12) return parseInt(months) + "M";
 
   let years = months / 12;
 
@@ -474,25 +233,33 @@ window.HandleDate3 = function (dateText) {
   return `${datePart} ${timePart}`;
 };
 
-var LoadingSection = document.querySelector(".loading");
-
-window.ShowLoadingSection = function () {
-  LoadingSection.classList.remove("d-none");
+window.EscapeHTML = function (text) {
+  const span = document.createElement("span");
+  span.innerText = text;
+  return span.innerHTML;
 };
 
-window.RemoveLoadingSection = function () {
-  LoadingSection.classList.add("d-none");
+function preventClick(event) {
+  event.stopPropagation();
+  event.preventDefault();
+}
+
+var loadPage = false;
+window.loadContent = true;
+
+window.RemovePreventClickEvent = function (element) {
+  element.removeEventListener("click", preventClick, true);
 };
 
-window.RemoveSection = function (e, sectionName) {
-  document.body.classList.remove("hide-scrollbar");
-
-  // if (e != null) e.preventDefault();
-
-  let section = document.querySelector(`${sectionName}`);
-  if (section != null) {
-    section.remove();
-  } else {
-    ShowAlert("Error", "Not Found", "danger");
-  }
+window.AddPreventClickEvent = function (element) {
+  element.addEventListener("click", preventClick, true);
 };
+
+window.AddPreventClickEvent(document);
+
+window.addEventListener("load", async () => {
+  // await delay(1111);
+  loadPage = true;
+
+  RemovePreventClickEvent(document);
+});

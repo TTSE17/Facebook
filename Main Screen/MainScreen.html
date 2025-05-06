@@ -10,19 +10,24 @@
     <link rel="stylesheet" href="../css/BS/bootstrap.min.css" />
     <link rel="stylesheet" href="../css/master.css" />
     <link rel="stylesheet" href="MainScreen.css" />
-
-    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    /> -->
   </head>
 
   <body>
     <nav class="navbar navbar-expand-sm sticky-top my-3 mb-4">
       <div class="container bg-white py-3 px-4 rounded-4 shadow">
-        <a class="navbar-brand fs-1 m-0 text-primary" href="">Facebook</a>
+        <a class="navbar-brand m-0 p-0 text-primary" href="">
+          <img
+            src="../imgs/download.png"
+            alt=""
+            class="rounded-circle"
+            style="width: 47px"
+          />
+        </a>
+        <div class="ms-4 pt-1 text-muted" role="button">
+          <a href="../Search/Search.html" class="text-muted">
+            <i class="fa-solid fa-search fs-2"></i>
+          </a>
+        </div>
         <button
           class="navbar-toggler shadow-none"
           type="button"
@@ -89,6 +94,19 @@
                 <i class="fa-solid fa-bell"></i>
               </a>
             </li>
+
+            <li class="nav-item">
+              <a
+                title="logout"
+                class="nav-link p-3 text-primary"
+                onclick="ClickLogout('saved')"
+                aria-current="page"
+                role="button"
+              >
+                <i class="fa-solid fa-right-from-bracket"></i>
+              </a>
+            </li>
+
             <li
               class="nav-item image ms-sm-3 mt-4 mt-sm-0 overflow-hidden"
               role="button"
@@ -106,7 +124,7 @@
           class="container gap-sm-3 gap-2 rounded-4 py-3 bg-white d-flex align-items-start"
         >
           <div class="image overflow-hidden">
-            <img decoding="async" class="w-100 h-100  rounded-circle " />
+            <img decoding="async" class="w-100 h-100 rounded-circle" />
           </div>
 
           <button
@@ -149,7 +167,95 @@
       </div>
     </div>
 
-    <div class="pop-section"></div>
+    <div class="pop-section">
+      <!-- <div class="comments position-fixed top-0 w-100 h-100">
+        <div class="overlay position-absolute w-100 h-100"></div>
+
+        <div
+          class="container position-absolute top-50 start-50 translate-middle border border-3 p-0 bg-white rounded-3"
+        >
+          <div class="d-flex align-items-center bg-primary p-3">
+            <h2 class="flex-grow-1 ps-1 text-white m-0">Total :1</h2>
+
+            <button
+              type="button"
+              class="btn-close shadow-none"
+              aria-label="Close"
+              onclick="RemoveSection(event,'.pop-section .comments')"
+            ></button>
+          </div>
+
+          <div class="content">
+            <div class="comment d-flex gap-sm-3 gap-2 p-3 pe-4">
+              <div class="image">
+                <img
+                  src="../imgs/d1.png"
+                  alt="${defaultImage}"
+                  class="rounded-circle border"
+                  role="button"
+                />
+              </div>
+
+              <div>
+                <div class="info rounded-3 py-2 ps-2 pe-3 mb-1">
+                  <h5 class="mb-1">${comment.userName}</h5>
+
+                  <p
+                    class="ps-1 mb-0"
+                    style="white-space: pre-wrap; word-break: break-word"
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Laborum quam reprehenderit alias itaque delectus quos sed
+                    molestiae eligendi accusantium! Nisi esse non omnis officia,
+                    labore quia nihil recusandae modi fuga!
+                  </p>
+                </div>
+
+                <div class="info2 d-flex justify-content-between px-1">
+                  <div class="left text-muted">
+                    <small
+                      onmouseover="this.innerText = HandleDate3('${comment.createdAt}');"
+                      onmouseout="this.innerText = HandleDate2('${comment.createdAt}');"
+                      >6m</small
+                    >
+                    <small class="mx-2" role="button">Like</small>
+                    <small role="button">Reply</small>
+                  </div>
+                  <div class="right">
+                    <small
+                      class="likes"
+                      onclick="ClickLikesBtn(${post.id})"
+                      role="button"
+                    >
+                      111
+                    </small>
+                    <small class="text-primary">
+                      <i class="fa-regular fa-thumbs-up"></i>
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dropdown mb-4 align-self-center">
+                <button
+                  class="btn border-0 p-0"
+                  data-bs-toggle="dropdown"
+                  data-bs-offset="19, -51"
+                >
+                  <i class="fa-solid fa-ellipsis"></i>
+                </button>
+
+                <ul class="dropdown-menu">
+                  <li class="dropdown-item" role="button">Edit</li>
+
+                  <li class="dropdown-item" role="button">Delete</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
 
     <!-- Edit Comment -->
     <div class="pop-section2"></div>
@@ -168,7 +274,6 @@
 
     <script src="../Js/BS/bootstrap.bundle.min.js"></script>
     <script src="../Js/BS/all.min.js"></script>
-    <!-- <script src="../Js/main.js" type="module"></script> -->
     <script src="MainScreen.js" type="module"></script>
   </body>
 </html>

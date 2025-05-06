@@ -1,19 +1,14 @@
-import { Post } from "../Js/main.js";
-
-import { User, ShowAlert } from "../Js/helper.js";
+import {} from "../Js/main.js";
+import { User } from "../Js/clsUser.js";
+import { Post } from "../Js/clsPost.js";
+import { ShowAlert } from "../Js/helper.js";
+import {} from "../Js/clsPassword.js";
 
 let profileImage = document.querySelector(".user-info .image img");
 
 let userName = document.querySelector(".user-info h3");
 
 let profileOptions = document.querySelector(".profile-options");
-
-var postsContainer = document.querySelector(".posts .content");
-
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
 
 const userId = getQueryParam("userId") ?? 0;
 
@@ -28,9 +23,13 @@ function Invalid() {
 let user = null;
 
 window.RefreshPage = async function () {
-  await Promise.all([LoadUserPosts(), GetUser()]);
+  // await Promise.all([LoadUserPosts(), GetUser()]);
+
+  await GetUser();
 
   LoadUserInfo();
+
+  LoadUserPosts(); // wait
 };
 
 window.RefreshPosts = async function () {
@@ -40,6 +39,8 @@ window.RefreshPosts = async function () {
 };
 
 await LoadPage();
+
+window.LoadingPosts();
 
 async function LoadPage() {
   ShowLoadingSection();
@@ -65,14 +66,14 @@ async function GetUser() {
   if (!response.valid) {
     // ShowAlert("Error", response.error,'danger');
 
-    Invalid();
+    if (response.error != "Unauthorized") Invalid();
 
     return;
   }
 
   CreateGuestUserProfile();
 
-  user.obj = response.obj;
+  user = response.obj;
 }
 
 function CreateCurrentUserProfile() {
@@ -145,7 +146,7 @@ function CreateCurrentUserProfile() {
 window.ClickEditProfile = function () {
   ShowLoadingSection();
 
-  ClickEditProfileItem();
+  window.ClickEditProfileItem();
 
   let toggleModalBtn = document.querySelector(".edit-profile button");
 
@@ -157,7 +158,7 @@ window.ClickEditProfile = function () {
 window.ClickChangePassword = function () {
   ShowLoadingSection();
 
-  ClickChangePasswordItem();
+  window.ClickChangePasswordItem();
 
   let toggleModalBtn = document.querySelector(".change-password button");
 
@@ -195,21 +196,21 @@ function CreateGuestUserProfile() {
 }
 
 async function LoadUserPosts() {
-  let filterRequest = { UserId: userId };
+  let filterRequest = { UserId: userId, pageNumber };
 
   let response = await Post.FetchPosts(filterRequest);
 
   if (response.valid) {
     Post.posts = response.obj;
 
-    Post.RenderPosts(postsContainer);
+    Post.RenderPosts();
   } else {
-    // ShowAlert("Error", response.error,'danger');
-    Invalid();
+    ShowAlert("Error", response.error, "danger");
+    // Invalid();
   }
 }
 
 function LoadUserInfo() {
-  profileImage.src = GetImage(user.obj.imagePath);
-  userName.innerHTML = user.obj.name;
+  profileImage.src = GetImage(user.imagePath);
+  userName.innerHTML = user.name;
 }

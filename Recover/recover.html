@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recover Account</title>
+
+    <link rel="stylesheet" href="../css/all.min.css" />
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/BS/bootstrap.min.css" />
+    <link rel="stylesheet" href="recover.css" />
+  </head>
+
+  <body>
+    <div class="search mt-4">
+      <div class="container px-0">
+        <div class="box rounded-3 border">
+          <h5 class="mb-0 p-3">Find your account</h5>
+
+          <p class="p-3 mb-0">Enter your email to search for your account.</p>
+
+          <div class="px-3">
+            <input
+              class="form-control"
+              placeholder="Email"
+              oninput="this.value = this.value.trim()"
+            />
+          </div>
+
+          <div class="footer p-3 mt-3 text-end">
+            <button class="cancel btn btn-secondary" onclick=cancel()>
+              Cancel
+            </button>
+            <button class="search btn btn-primary">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code mt-4"></div>
+
+    <div class="new-password mt-4"></div>
+
+    <div class="finished">
+      <div class="container text-center"></div>
+    </div>
+
+    <!-- Alert - Confirm -->
+    <div class="alerts"></div>
+
+    <div class="loading position-fixed top-0 w-100 h-100 d-none">
+      <div class="overlay position-absolute w-100 h-100"></div>
+      <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+        <div class="spinner-border text-primary fs-3 p-5" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="../Js/BS/bootstrap.bundle.min.js"></script>
+    <script src="../Js/BS/all.min.js"></script>
+    <script src="recover.js" type="module"></script>
+  </body>
+</html>

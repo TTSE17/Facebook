@@ -1,5 +1,7 @@
-import { Post } from "../Js/main.js";
+import {} from "../Js/main.js";
+import { Post } from "../Js/clsPost.js";
 import { ShowAlert } from "../Js/helper.js";
+import {} from "../Js/clsPassword.js";
 
 let editInfoBtn = document.querySelector(".navbar .edit-info");
 
@@ -8,20 +10,24 @@ let changePasswordItem = document.querySelector(".navbar .change-password");
 let profileBtn = document.querySelector(".navbar .image");
 let profileImage = document.querySelector(".navbar .image img");
 
+let homeSection = document.querySelector(".home");
+
 let homeImage = document.querySelector(".home-header img");
 var createPostBtn = document.querySelector(".home-header button");
 
 var recentBtn = document.querySelector(".posts .post-header li:first-child a");
 var popularBtn = document.querySelector(".posts .post-header li:last-child a");
 
-var postsContainer = document.querySelector(".posts .content");
-
 let recentBtnActive = recentBtn.classList.contains("active");
+
+window.AddPreventClickEvent(homeSection);
 
 window.RefreshPage = async function () {
   LoadCurrentUserInfo();
 
   await RefreshPosts();
+
+  RemovePreventClickEvent(homeSection);
 };
 
 window.RefreshPosts = async function () {
@@ -30,12 +36,12 @@ window.RefreshPosts = async function () {
 
 await LoadPage();
 
+window.LoadingPosts();
+
 async function LoadPage() {
-  if (currentUser == null) return;
+  // ShowLoadingSection();
 
-  ShowLoadingSection();
-
-  await RefreshPage();
+  RefreshPage(); // wait
 
   RemoveLoadingSection();
 }
@@ -43,6 +49,7 @@ async function LoadPage() {
 async function LoadPosts() {
   let filterReuest = {
     type: recentBtnActive ? null : "popular",
+    pageNumber,
   };
 
   let response = await Post.FetchPosts(filterReuest);
@@ -50,21 +57,21 @@ async function LoadPosts() {
   if (response.valid) {
     Post.posts = response.obj;
 
-    Post.RenderPosts(postsContainer);
+    Post.RenderPosts();
   } else {
     ShowAlert("Error", response.error, "danger");
   }
 }
 
 function LoadCurrentUserInfo() {
-  profileImage.src = window.GetImage(currentUser.obj.imagePath);
+  profileImage.src = window.GetImage(currentUser.imagePath);
   homeImage.src = profileImage.src;
 }
 
 editInfoBtn.addEventListener("click", () => {
   ShowLoadingSection();
 
-  ClickEditProfileItem();
+  window.ClickEditProfileItem();
 
   let toggleModelBtn = document.querySelector(".edit-profile button");
 
@@ -76,7 +83,7 @@ editInfoBtn.addEventListener("click", () => {
 changePasswordItem.addEventListener("click", () => {
   ShowLoadingSection();
 
-  ClickChangePasswordItem();
+  window.ClickChangePasswordItem();
 
   let toggleModelBtn = document.querySelector(".change-password button");
 
@@ -86,13 +93,13 @@ changePasswordItem.addEventListener("click", () => {
 });
 
 profileBtn.addEventListener("click", async () => {
-  LoadUserInfo(currentUser.obj.id);
+  window.LoadUserInfo(currentUser.id);
 });
 
-createPostBtn.addEventListener("click", () => {
+createPostBtn.addEventListener("click", async () => {
   ShowLoadingSection();
 
-  ManagePostSection();
+  await window.ManagePostSection();
 
   let toggleModelBtn = document.querySelector(".manage-post button");
 
@@ -108,6 +115,10 @@ recentBtn.addEventListener("click", async () => {
 
   recentBtnActive = true;
 
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
+
   await LoadPosts();
 
   RemoveLoadingSection();
@@ -119,6 +130,10 @@ popularBtn.addEventListener("click", async () => {
   ShowLoadingSection();
 
   recentBtnActive = false;
+
+  window.pageNumber = 1;
+
+  postsContainer.innerHTML = "";
 
   await LoadPosts();
 

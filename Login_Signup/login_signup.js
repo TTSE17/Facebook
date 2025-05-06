@@ -1,7 +1,8 @@
-import { saveToken, removeToken } from "../Js/token.js";
-import { User, ShowAlert } from "../Js/helper.js";
+import { saveToken, saveRefreshToken } from "../Js/clsToken.js";
+import { User, SaveUserInfoInStorrage } from "../Js/clsUser.js";
+import { ShowAlert } from "../Js/helper.js";
 
-removeToken();
+localStorage.clear();
 
 let contain = document.querySelector(".contain");
 
@@ -15,8 +16,7 @@ let passwordInputLogin = document.querySelector(
   ".login-form input[type='password']"
 );
 
-// let ForgotPassword = document.querySelector(".login-form a.forgot-password");
-
+let ForgotAccount = document.querySelector(".login-form a.forgot-account");
 let loginLink = document.querySelector(".signup-form a.login");
 
 let signupForm = document.querySelector(".signup-form");
@@ -27,6 +27,10 @@ let emailInputSignup = document.querySelector(
 let passwordInputSignup = document.querySelector(
   ".signup-form input[type='password']"
 );
+
+ForgotAccount.addEventListener("click", () => {
+  window.location.href = "../Recover/recover.html";
+});
 
 signupLink.addEventListener("click", Flip);
 loginLink.addEventListener("click", Flip);
@@ -56,9 +60,17 @@ signupForm.addEventListener("submit", async (e) => {
 
   let response = await User.Register(userRequest);
 
-  console.log(response);
+  if (response.valid) {
+    ShowAlert(
+      "Done!",
+      "Registration successful! Please check your email and click the confirmation link to complete your registration",
+      "success"
+    );
+  } else {
+    ShowAlert("Error", response.error, "danger");
+  }
 
-  Result(response);
+  RemoveLoadingSection();
 });
 
 function GetLoginRequest() {
@@ -80,18 +92,31 @@ loginForm.addEventListener("submit", async (e) => {
 
   let response = await User.Login(loginRequest);
 
-  Result(response);
-});
-
-function Result(response) {
   if (response.valid) {
-    let token = response.obj.token;
-
-    saveToken(token);
+    SaveData(response.obj);
 
     window.location.href = "../Main Screen/MainScreen.html";
   } else {
     ShowAlert("Error", response.error, "danger");
   }
   RemoveLoadingSection();
+});
+
+function SaveData(data) {
+  let token = data.token;
+
+  saveToken(token);
+
+  let refreshToken = data.refreshToken;
+
+  saveRefreshToken(refreshToken);
+
+  var userInfo = {
+    id: data["id"],
+    name: data["name"],
+    email: data["email"],
+    imagePath: data["imagePath"],
+  };
+
+  SaveUserInfoInStorrage(userInfo);
 }
